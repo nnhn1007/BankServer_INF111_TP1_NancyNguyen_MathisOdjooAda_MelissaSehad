@@ -99,17 +99,17 @@ public class Banque implements Serializable {
     public boolean ajouter(String numCompteClient, String nip) {
         for (int i = 0; i < numCompteClient.length(); i++) {
             char caractere = numCompteClient.charAt(i);
-            if ((caractere >= 'a' && caractere <= 'z') && (
+            if ((caractere >= 'a' && caractere <= 'z') ||  ( // Reste à exclure les carac spéciaux
                     numCompteClient.length() < 6 || numCompteClient.length() > 8)) {
                 System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
-        if (nip.matches("[0-9]+") && (nip.length() < 4 || nip.length() > 5)) { // Fonctionne
+        if (!nip.matches("[0-9]+") || (nip.length() < 4 || nip.length() > 5)) {  //Fonctionne et tester
             System.out.println("Test NON2"); //TODO ENLEVER LE TEST
             return false;
         }
-        for (CompteClient compteClient : comptes) {
+        for (CompteClient compteClient : comptes) { // Il ne fonctionne pas
             if (getCompteClient(numCompteClient) != null) {
                 System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                 return false;
@@ -130,7 +130,7 @@ public class Banque implements Serializable {
      * Fait par (Nancy Nguyen et Mathis Odjo'o Ada)
      * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
      *
-     * @param numCompteClient numéro de compte-client
+     * @param numCompteClient numéro du compte-client
      * @return numéro du compte-chèque du client ayant le numéro de compte-client
      */
     public String getNumeroCompteParDefaut(String numCompteClient) {
