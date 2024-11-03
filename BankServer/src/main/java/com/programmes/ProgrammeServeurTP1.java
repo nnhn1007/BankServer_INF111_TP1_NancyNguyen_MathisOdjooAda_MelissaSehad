@@ -1,5 +1,7 @@
 package com.programmes;
 
+import com.atoudeft.banque.CompteEpargne;
+import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.serveur.Config;
 import com.atoudeft.serveur.Serveur;
 import com.atoudeft.banque.serveur.ServeurBanque;
@@ -38,5 +40,21 @@ public class ProgrammeServeurTP1 {
             saisie = clavier.nextLine();
         }
         serveur.arreter();
+    /*
+        //Test sur les Comptes Épargnes
+        CompteEpargne compteEpargne= new CompteEpargne("ABD342W", TypeCompte.EPARGNE,0.05);
+        compteEpargne.crediter(500);
+        System.out.println("Solde après l'avoir crédité :"+compteEpargne.getSolde());
+
+        compteEpargne.debiter(100);
+        System.out.println("Solde après l'avoir débité :"+compteEpargne.getSolde());
+
+        compteEpargne.ajouterInterets();
+        System.out.println("Solde après avoir ajouté les intérets :"+compteEpargne.getSolde());
+    */
+
     }
+
+
+
 }

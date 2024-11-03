@@ -1,7 +1,8 @@
 package com.atoudeft.banque;
 
-public class CompteCheque extends CompteBancaire{
-    final static  int ZERO=0;
+public class CompteCheque extends CompteBancaire {
+    private final int ZERO = 0;
+
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un compte chèque.
@@ -16,14 +17,14 @@ public class CompteCheque extends CompteBancaire{
     /**
      * Fait par Mathis Odjo'o Ada
      * Méthode qui réalise un dépot d'argent dans le solde d'un compte-Chèque.
+     *
      * @param montant Variable double qui représente le montant à ajouter au solde.
      * @return True si le solde initial était strictement positive, sinon retourne false
      */
     @Override
     public boolean crediter(double montant) {
-        double solde= getSolde();
-        if(solde>ZERO){ //Strictement positive
-            solde+=montant; //Inutile?
+        if (montant > ZERO) {
+            setSolde(getSolde() + montant);
             return true;
         }
         return false;
@@ -34,14 +35,13 @@ public class CompteCheque extends CompteBancaire{
      * Méthode qui réalise un retrait d'argent dans le solde d'un compte-chèque
      *
      * @param montant Variable double qui représente le montant à débiter du solde
-     * @return True si le solde initial était strictement positif et que le sole
+     * @return True si le solde initial était strictement positif et que le solde
      * intiale est plus grand ou égal au montant à retirer, sinon retourne false.
      */
     @Override
     public boolean debiter(double montant) {
-        double solde=getSolde();
-        if(solde>ZERO && solde>=montant){ //Strictement positive et solde >= montant
-            solde-=montant; // Inutile ?
+        if (montant > ZERO && getSolde() >= montant) { //Strictement positive et solde >= montant
+            setSolde(getSolde() - montant);
             return true;
         }
         return false;

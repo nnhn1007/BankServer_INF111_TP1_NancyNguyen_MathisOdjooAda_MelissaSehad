@@ -91,7 +91,7 @@ public class ServeurBanque extends Serveur {
      * du TP).
      */
     public void supprimeInactifs() {
-        for (int i= connectes.size()-1; i>=0; i++){// Boucle FOR( impo avec un FOR Each, on arrive à la limite+1
+        for (int i= connectes.size()-1; i>=0; i--){// Boucle FOR( impo avec un FOR Each, on arrive à la limite+1
             // ce qui crée une exception) qui va parcourir la listes des connexions.
             Connexion cnx=connectes.get(i);
             if (((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
