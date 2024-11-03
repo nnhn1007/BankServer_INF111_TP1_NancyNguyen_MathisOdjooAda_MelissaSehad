@@ -7,8 +7,8 @@ import com.atoudeft.banque.serveur.ServeurBanque;
 import java.util.Scanner;
 
 /**
- * Programme simple de d�monstration d'un serveur. Le programme d�marre un serveur qui se met � �couter
- * l'arriv�e de connexions.
+ * Programme simple de démonstration d'un serveur. Le programme démarre un serveur qui se met à écouter
+ * l'arrivée de connexions.
  *
  * @author Abdelmoum�ne Toudeft (Abdelmoumene.Toudeft@etsmtl.ca)
  * @version 1.0

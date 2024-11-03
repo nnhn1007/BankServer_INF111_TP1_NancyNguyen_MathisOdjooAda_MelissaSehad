@@ -16,7 +16,7 @@ import java.util.ListIterator;
  * @since 2024-08-20
  */
 public class ServeurBanque extends Serveur {
-    public static final int DELAI_INACTIVITE = 30000;
+    public static final int DELAI_INACTIVITE = 10000;
     //Référence vers la banque gérée par ce serveur :
     private Banque banque;
     //Thread qui supprime les connexions inactives :
@@ -91,12 +91,13 @@ public class ServeurBanque extends Serveur {
      * du TP).
      */
     public void supprimeInactifs() {
-        ServeurBanque serveurBanque = new ServeurBanque(getPort());
-        for (Connexion cnx : connectes) {// Boucle qui va parcourir la listes des connexions.
+        for (int i= connectes.size()-1; i>=0; i--){// Boucle FOR( impo avec un FOR Each, on arrive à la limite+1
+            // ce qui crée une exception) qui va parcourir la listes des connexions.
+            Connexion cnx=connectes.get(i);
             if (((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
-                cnx.envoyer("END");// Envoie un message END à l'utilisateur.
+                cnx.envoyer("END");// Envoie un message END
                 cnx.close();// Ferme la session d'un utilisateur aprés 30 secondes en état inactif
-                serveurBanque.enlever(cnx); //Enlève la connexion de la banque de serveur
+                connectes.remove(i); //Enlève la connexion de la banque de serveur
             }
         }
     }
