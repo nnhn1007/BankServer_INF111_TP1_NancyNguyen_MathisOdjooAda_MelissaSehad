@@ -6,6 +6,7 @@ import com.atoudeft.commun.net.Connexion;
 import com.atoudeft.serveur.Serveur;
 
 import java.util.ListIterator;
+
 /**
  * Cette classe étend (hérite) la classe Serveur et y ajoute le nécessaire pour que le
  * serveur soit un serveur de banque.
@@ -20,6 +21,7 @@ public class ServeurBanque extends Serveur {
     private Banque banque;
     //Thread qui supprime les connexions inactives :
     private ThreadDesInactifs threadDesInactifs;
+
     /**
      * Crée un serveur qui va écouter sur le port spécifié.
      *
@@ -31,11 +33,13 @@ public class ServeurBanque extends Serveur {
 
     /**
      * Retourne la banque gérée par ce serveur.
+     *
      * @return la banque gérée par ce serveur
      */
     public Banque getBanque() {
         return banque;
     }
+
     /**
      * Démarre le serveur de banque, s'il n'a pas déjà été démarré. Démarre le thread qui écoute l'arrivée de clients,
      * le thread qui écoute l'arrivée de texte et le thread qui supprime les connexions inactives. Mets en place le
@@ -48,7 +52,7 @@ public class ServeurBanque extends Serveur {
     public boolean demarrer() {
         if (super.demarrer()) {
             this.banque = EntreesSorties.charger();
-            if (this.banque==null)
+            if (this.banque == null)
                 this.banque = new Banque("BankEts");
             threadDesInactifs = new ThreadDesInactifs(this);
             threadDesInactifs.start();
@@ -56,6 +60,7 @@ public class ServeurBanque extends Serveur {
         }
         return false;
     }
+
     /**
      * Arrête le serveur en arrêtant les threads qui écoutent l'arrivée de client et l'arrivée de texte et les threads
      * qui supprime les connexions inactives et qui traite les nouveaux clients.
@@ -63,27 +68,36 @@ public class ServeurBanque extends Serveur {
     @Override
     public void arreter() {
         super.arreter();
-        if (threadDesInactifs!=null)
+        if (threadDesInactifs != null)
             threadDesInactifs.interrupt();
         EntreesSorties.sauvegarder(banque);
     }
 
     /**
      * Fournit la liste des numéros des comptes-client connectés, séparés par le symbole :.
+     *
      * @return la liste des numéros des comptes-client connectés
      */
     public String list() {
         String s = "";
-        for (Connexion cnx:connectes) {
-            s += ((ConnexionBanque)cnx).getNumeroCompteClient() + ":";
+        for (Connexion cnx : connectes) {
+            s += ((ConnexionBanque) cnx).getNumeroCompteClient() + ":";
         }
         return s;
     }
+
     /**
      * Supprime toutes les connexions inactives (celles dont le délai d'inactivité dépasse DELAI_INACTIVITE - voir énoncé
      * du TP).
      */
     public void supprimeInactifs() {
-        //À définir :
+        ServeurBanque serveurBanque = new ServeurBanque(getPort());
+        for (Connexion cnx : connectes) {// Boucle qui va parcourir la listes des connexions.
+            if (((ConnexionBanque) cnx).estInactifDepuis(DELAI_INACTIVITE)){
+                cnx.envoyer("END");// Envoie un message END à l'utilisateur.
+                cnx.close();// Ferme la session d'un utilisateur aprés 30 secondes en état inactif
+                serveurBanque.enlever(cnx); //Enlève la connexion de la banque de serveur
+            }
+        }
     }
 }

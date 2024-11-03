@@ -30,7 +30,7 @@ public class ConnexionBanque extends Connexion {
      */
     public boolean estInactifDepuis(long delai) {
             long tempsEcoule =System.currentTimeMillis()-tempsDerniereOperation;
-            return tempsEcoule>=delai;
+            return tempsEcoule>delai;
     }
 
     /**
