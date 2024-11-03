@@ -76,6 +76,7 @@ public class Serveur implements Lecteur {
             ecouteurTexte.start();
             gestionnaireEvenement = new GestionnaireEvenementServeur(this);
             demarre = true;
+
             return true;
         } catch (IOException e) {
             System.out.println("serveurSocket erreur : " + e.getMessage());
