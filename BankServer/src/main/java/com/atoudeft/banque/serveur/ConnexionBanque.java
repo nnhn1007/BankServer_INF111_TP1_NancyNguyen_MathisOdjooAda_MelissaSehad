@@ -23,6 +23,7 @@ public class ConnexionBanque extends Connexion {
     }
 
     /**
+     * Fait par Mathis Odjo'o Ada
      * Indique si le client utilisant cette connexion est inactif pendant une durée au moins égale à delai en millisecondes.
      *
      * @param delai le délai en millisecondes

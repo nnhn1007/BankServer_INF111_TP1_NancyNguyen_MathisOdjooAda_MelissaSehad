@@ -86,7 +86,7 @@ public class ServeurBanque extends Serveur {
         return s;
     }
 
-    /**
+    /** Fait par Mathis Odjo'o Ada
      * Supprime toutes les connexions inactives (celles dont le délai d'inactivité dépasse DELAI_INACTIVITE - voir énoncé
      * du TP).
      */

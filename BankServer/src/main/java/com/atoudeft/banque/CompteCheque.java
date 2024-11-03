@@ -3,6 +3,7 @@ package com.atoudeft.banque;
 public class CompteCheque extends CompteBancaire{
     final static  int ZERO=0;
     /**
+     * Fait par Mathis Odjo'o Ada
      * Crée un compte chèque.
      *
      * @param numero numéro du compte
@@ -13,6 +14,7 @@ public class CompteCheque extends CompteBancaire{
     }
 
     /**
+     * Fait par Mathis Odjo'o Ada
      * Méthode qui réalise un dépot d'argent dans le solde d'un compte-Chèque.
      * @param montant Variable double qui représente le montant à ajouter au solde.
      * @return True si le solde initial était strictement positive, sinon retourne false
@@ -28,6 +30,7 @@ public class CompteCheque extends CompteBancaire{
     }
 
     /**
+     * Fait par Mathis Odjo'o Ada
      * Méthode qui réalise un retrait d'argent dans le solde d'un compte-chèque
      *
      * @param montant Variable double qui représente le montant à débiter du solde
