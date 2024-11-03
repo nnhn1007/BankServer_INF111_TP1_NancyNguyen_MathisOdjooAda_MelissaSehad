@@ -99,8 +99,8 @@ public class Banque implements Serializable {
     public boolean ajouter(String numCompteClient, String nip) {
         for (int i = 0; i < numCompteClient.length(); i++) {
             char caractere = numCompteClient.charAt(i);
-            if (!((caractere >= 'A' && caractere <= 'Z')) ||  ( // Fonctionne et tester
-                    numCompteClient.length() < 6 || numCompteClient.length() > 8)) {
+            if (!((caractere >= 'A' && caractere <= 'Z') || ((caractere>='0' && caractere<='9')))  ||  ( // Fonctionne et tester
+                    numCompteClient.length() < 6 || numCompteClient.length() > 8)){
                 System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                 return false;
             }
