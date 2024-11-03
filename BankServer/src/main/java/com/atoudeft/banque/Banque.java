@@ -1,5 +1,6 @@
 package com.atoudeft.banque;
 
+import org.w3c.dom.ls.LSOutput;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
@@ -94,20 +95,29 @@ public class Banque implements Serializable {
      * @return true si le compte a été créé correctement
      */
     public boolean ajouter(String numCompteClient, String nip) {
-        /*À compléter et modifier :
-            - Vérifier que le numéro a entre 6 et 8 caractères et ne contient que des lettres majuscules et des chiffres.
-              Sinon, retourner false.
-            - Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres. Sinon,
-              retourner false.
-            - Vérifier s'il y a déjà un compte-client avec le numéro, retourner false.
-            - Sinon :
-                . Créer un compte-client avec le numéro et le nip;
-                . Générer (avec CompteBancaire.genereNouveauNumero()) un nouveau numéro de compte bancaire qui n'est
-                  pas déjà utilisé;
-                . Créer un compte-chèque avec ce numéro et l'ajouter au compte-client;
-                . Ajouter le compte-client à la liste des comptes et retourner true.
-         */
-        return this.comptes.add(new CompteClient(numCompteClient,nip)); //À modifier
+        for (int i = 0; i <numCompteClient.length(); i++) {
+            char caractere=numCompteClient.charAt(i);
+            if((caractere>= 'a'&& caractere <= 'z') && (
+                    numCompteClient.length()<6 || numCompteClient.length()>8)){
+                System.out.println("Test NON"); //TODO ENLEVER LE TEST
+                return false;
+            }
+            else if(nip.matches("0-9") && (nip.length()<4 ||nip.length()>5 )){
+                System.out.println("Test NON"); //TODO ENLEVER LE TEST
+                return false;
+            }
+            else if (getCompteClient((numCompteClient))!=null){
+                System.out.println("Test NON"); //TODO ENLEVER LE TEST
+                return false;
+            }
+        }
+        System.out.println("Test OUI"); //TODO ENLEVER LE TEST
+        CompteClient compteClient= new CompteClient(numCompteClient,nip);
+        String numCompteBancaire = CompteBancaire.genereNouveauNumero();
+        CompteCheque compteCheque= new CompteCheque(numCompteBancaire,TypeCompte.CHEQUE);
+        compteClient.ajouter(compteCheque);
+        comptes.add(compteClient);
+        return true;
     }
 
     /**

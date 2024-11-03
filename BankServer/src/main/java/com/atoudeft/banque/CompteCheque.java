@@ -27,6 +27,13 @@ public class CompteCheque extends CompteBancaire{
         return false;
     }
 
+    /**
+     * Méthode qui réalise un retrait d'argent dans le solde d'un compte-chèque
+     *
+     * @param montant Variable double qui représente le montant à débiter du solde
+     * @return True si le solde initial était strictement positif et que le sole
+     * intiale est plus grand ou égal au montant à retirer, sinon retourne false.
+     */
     @Override
     public boolean debiter(double montant) {
         double solde=getSolde();
