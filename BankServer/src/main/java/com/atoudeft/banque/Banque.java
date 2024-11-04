@@ -141,7 +141,7 @@ public class Banque implements Serializable {
     public String getNumeroCompteParDefaut(String numCompteClient) {
         CompteClient compteClient =getCompteClient(numCompteClient);
 
-        if(compteClient!=null){
+        if(compteClient != null){
             return getCompteClient(numCompteClient).toString();
         }
         return null; // Retourne null si aucun-compte-chèque n'a été trouvé
