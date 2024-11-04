@@ -2,11 +2,15 @@ package com.atoudeft.serveur;
 
 import com.atoudeft.banque.Banque;
 import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.CompteEpargne;
+import com.atoudeft.banque.CompteBancaire;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
+
+
 
 
 
@@ -150,6 +154,31 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
+
+                    //3.Vérifier si le client a déjà un compte-épargne
+                    /*boolean compteEpargneExiste = false;
+                    for (CompteClient compte : banque.getComptes()){
+                        if (compte.getNumeroCompteClient().equals(numCompteClient) && compte instanceof CompteEpargne){
+                            compteEpargneExiste = true;
+                            break;
+                        }
+                    }
+
+                    if(compteEpargneExiste){
+                        cnx.envoyer("EPARGNE NO"); //le client possède déjà un compte-épargne
+                        break;
+                    } */
+
+                    // Générer un numéro unique pour le compte-épargne
+                    String numCompteEpargne;
+                    do {
+                        numCompteEpargne = CompteBancaire.genereNouveauNumero();
+                    } while (banque.getCompteClient(numCompteEpargne) != null);
+
+                    CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
+                    //CompteClient.ajouter(numCompteEpargne); //????
+                    cnx.envoyer("EPARGNE OK"); //inutile?
+                    break;
 
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
