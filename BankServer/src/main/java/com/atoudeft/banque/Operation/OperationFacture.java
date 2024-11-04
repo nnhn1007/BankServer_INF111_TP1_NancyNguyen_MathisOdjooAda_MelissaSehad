@@ -1,4 +1,23 @@
 package com.atoudeft.banque.Operation;
 
-public class OperationFacture {
+import com.atoudeft.banque.TypeOperation;
+
+public class OperationFacture extends Operation{
+    private double montantFacture;
+    private String numeroFacture;
+    private String descriptionFacture;
+
+    /**
+     * Fait par Mathis Odjo'o Ada
+     *
+     * @param montantFacture
+     * @param numeroFacture
+     * @param descriptionFacture
+     */
+    public OperationFacture(double montantFacture, String numeroFacture, String descriptionFacture) {
+        super(TypeOperation.FACTURE);
+        this.montantFacture=montantFacture;
+        this.numeroFacture=numeroFacture;
+        this.descriptionFacture=descriptionFacture;
+    }
 }
