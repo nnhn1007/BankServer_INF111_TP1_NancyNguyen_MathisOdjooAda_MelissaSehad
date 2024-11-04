@@ -1,17 +1,13 @@
 package com.atoudeft.serveur;
 
-import com.atoudeft.banque.Banque;
-import com.atoudeft.banque.CompteClient;
-import com.atoudeft.banque.CompteEpargne;
-import com.atoudeft.banque.CompteBancaire;
+import com.atoudeft.banque.*;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
-
-
+import java.util.List;
 
 
 /**
@@ -137,7 +133,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 case "EPARGNE":
                     // Fait par Nancy Nguyen
                     /* Stratégie:
-                     *  1. Receuillir les informations du client (FAIT)
+                     *  1. Recueillir les informations du client (FAIT)
                      *  2. Vérifier si le client est connecté (FAIT)
                      *  3. Vérifier si le client possède un compte-épargne
                      *  4. Générer un numéro unique pour le compte-épargne
@@ -175,10 +171,44 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         numCompteEpargne = CompteBancaire.genereNouveauNumero();
                     } while (banque.getCompteClient(numCompteEpargne) != null);
 
-         //         CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
+                    //CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
                     //CompteClient.ajouter(numCompteEpargne); //????
                     cnx.envoyer("EPARGNE OK"); //inutile?
                     break;
+
+                /************************      Q5.1 SELECT       ******************************/
+                case "SELECT":
+                    // Fait par Nancy Nguyen
+                    /* Stratégie:
+                     *  1. Vérifier si le client est connecté (OK)
+                     *  2. Récupérer l'argument de la commande (chèque ou épargne) (OK)
+                     *  3. Demander à la banque de donner le numéro de banque du client
+                     *     et Stocker le numéro dans l'objet ConnexionBanque du client
+                     *      opération réussie => SELECT OK
+                     *      opération non réussie => SELECT NO
+                     */
+
+                    //1. Vérifier si le client est connecté
+                    numCompteClient = cnx.getNumeroCompteClient();
+                    if (numCompteClient == null) {
+                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        break;
+                    }
+
+                    //2. Recupération de l'argument de la commande (chèque ou épargne)
+                    argument = evenement.getArgument().toLowerCase(); //pour éviter les ambiguités
+                    String numCompte;
+                    TypeCompte typeCompte;
+                    banque = serveurBanque.getBanque();
+                    compteClient = banque.getCompteClient(numCompteClient);
+
+
+                    if(argument.equals("chèque") ){
+                        typeCompte = TypeCompte.CHEQUE;
+                        numCompte = banque.getNumeroCompteParDefaut(cnx.getNumeroCompteClient()); //pas certaine
+                    } //else if (argument.equals("épargne") && compteClient instanceof CompteEpargne){
+                        //typeCompte = TypeCompte.EPARGNE;
+                   // }
 
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
