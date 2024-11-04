@@ -30,4 +30,6 @@ public class CompteClient implements Serializable {
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
+
+    public String getNip(){ return this.nip; } //Q3.1 - Ecq on peut l'ajouter??
 }

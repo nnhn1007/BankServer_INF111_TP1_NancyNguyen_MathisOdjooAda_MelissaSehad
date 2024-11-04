@@ -86,7 +86,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 case "CONNECT":
                     /*
                      * Stratégie:
-                     *   1. Récupérer les informations du client : numéro de compte et le pin (FAIT)
+                     *   1. Récuperer les informations du client : numéro de compte et le pin
                      *   2. Vérifier s'il y a un autre client déjà connecté sur ce compte
                      *   3. Vérifier si le nip est correct
                      *       3.1. Regarder si le compte existe
@@ -94,39 +94,41 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                      *       3.3. Comparer les deux nip
                      *   4. Inscrire le numéro du compte-client et son compte-chèque dans l'objet
                      *      connexionBanque du client
-                     */
+                     * */
 
-                    // Récupération des informations du client (Comme dans le case "NOUVEAU")
+                    //Récupération des informations du client : Numéro de compte-client et nip
                     argument = evenement.getArgument();
                     t = argument.split(":");
-                    if (t.length < 2) { // Si t < 2, il manque au moins une information, et on sort du switch
+                    if (t.length < 2) { /* Si t < 2, il manque au moins une information, et on sort du switch */
                         cnx.envoyer("CONNECT NO");
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
-                        break;
-                    }
-                    numCompteClient = t[0]; // Numéro du Compte-Client
-                    nip = t[1]; // Nip associé au Compte-Client
-
-                    // Vérifier s'il y a un autre client déjà connecté sur ce compte
-                    if (cnx.getNumeroCompteClient() != null) {
-                        cnx.envoyer("CONNECT NO"); // Un client est déjà connecté sur ce compte
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
 
+                    numCompteClient = t[0];
+                    nip = t[1];
 
+                    //Vérifier s'il y a un autre client déjà connecté sur ce compte
+                    if (cnx.getNumeroCompteClient() != null){
+                        cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
+                        break;
+                    }
+
+                    //Vérifier si le nip correspond au nip enregistré relié au compte-chèque
                     banque = serveurBanque.getBanque();
                     CompteClient compteClient = banque.getCompteClient(numCompteClient);
 
-                    // Vérification de l'existence du compte-client
-                    // Vérifier si le nip correspond au nip enregistré relié au compte-chèque
+                    String nipEnregistré = compteClient.getNip();
+                    if(!nipEnregistré.equals(nip)){
+                        cnx.envoyer("CONNECT NO"); //Le nip enregistré est différent au nip entré
+                        break;
+                    }
 
-
-                    // Inscrire le numéro du compte-client et son compte-chèque dans l'objet connexion
+                    //Inscrire le numéro du compte-client et son compte-chèque dans l'objet
                     cnx.setNumeroCompteClient(numCompteClient);
                     cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                     cnx.envoyer("CONNECT OK");
                     break;
+
                 /************************      Q4.2 ÉPARGNE       ******************************/
                 case "EPARGNE":
                     // Fait par Nancy Nguyen
