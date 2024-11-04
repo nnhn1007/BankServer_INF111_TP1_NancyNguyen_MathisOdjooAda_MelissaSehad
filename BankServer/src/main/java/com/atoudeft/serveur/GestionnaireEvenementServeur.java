@@ -1,11 +1,14 @@
 package com.atoudeft.serveur;
 
 import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteClient;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
+
+
 
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
@@ -35,7 +38,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
     @Override
     public void traiter(Evenement evenement) {
         Object source = evenement.getSource();
-        ServeurBanque serveurBanque = (ServeurBanque)serveur;
+        ServeurBanque serveurBanque = (ServeurBanque) serveur;
         Banque banque;
         ConnexionBanque cnx;
         String msg, typeEvenement, argument, numCompteClient, nip;
@@ -58,28 +61,121 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /******************* COMMANDES DE GESTION DE COMPTES *******************/
                 case "NOUVEAU": //Crée un nouveau compte-client :
-                    if (cnx.getNumeroCompteClient()!=null) {
+                    if (cnx.getNumeroCompteClient() != null) {
                         cnx.envoyer("NOUVEAU NO deja connecte");
                         break;
                     }
                     argument = evenement.getArgument();
                     t = argument.split(":");
-                    if (t.length<2) {
+                    if (t.length < 2) {
                         cnx.envoyer("NOUVEAU NO");
-                    }
-                    else {
+                    } else {
                         numCompteClient = t[0];
                         nip = t[1];
                         banque = serveurBanque.getBanque();
-                        if (banque.ajouter(numCompteClient,nip)) {
+                        if (banque.ajouter(numCompteClient, nip)) {
                             cnx.setNumeroCompteClient(numCompteClient);
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                             cnx.envoyer("NOUVEAU OK " + t[0] + " cree");
-                        }
-                        else
-                            cnx.envoyer("NOUVEAU NO "+t[0]+" existe");
+                        } else
+                            cnx.envoyer("NOUVEAU NO " + t[0] + " existe");
                     }
                     break;
+                /******************* Q3.1 - CAS OÙ LE CLIENT A DÉJÀ UN COMPTE-CLIENT *******************/
+                // Fait par Nancy Nguyen
+                case "CONNECT":
+                    /*
+                     * Stratégie:
+                     *   1. Récupérer les informations du client : numéro de compte et le pin (FAIT)
+                     *   2. Vérifier s'il y a un autre client déjà connecté sur ce compte
+                     *   3. Vérifier si le nip est correct
+                     *       3.1. Regarder si le compte existe
+                     *       3.2. Regarder si le nip enregistré correspond au NIP entré par l'utilisateur
+                     *       3.3. Comparer les deux nip
+                     *   4. Inscrire le numéro du compte-client et son compte-chèque dans l'objet
+                     *      connexionBanque du client
+                     */
+
+                    // Récupération des informations du client (Comme dans le case "NOUVEAU")
+                    argument = evenement.getArgument();
+                    t = argument.split(":");
+                    if (t.length < 2) { // Si t < 2, il manque au moins une information, et on sort du switch
+                        cnx.envoyer("CONNECT NO");
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+                    numCompteClient = t[0]; // Numéro du Compte-Client
+                    nip = t[1]; // Nip associé au Compte-Client
+
+                    // Vérifier s'il y a un autre client déjà connecté sur ce compte
+                    if (cnx.getNumeroCompteClient() != null) {
+                        cnx.envoyer("CONNECT NO"); // Un client est déjà connecté sur ce compte
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+
+                    banque = serveurBanque.getBanque();
+                    CompteClient compteClient = banque.getCompteClient(numCompteClient);
+
+                    // Vérification de l'existence du compte-client
+                    // Vérifier si le nip correspond au nip enregistré relié au compte-chèque
+
+
+                    // Inscrire le numéro du compte-client et son compte-chèque dans l'objet connexion
+                    cnx.setNumeroCompteClient(numCompteClient);
+                    cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
+                    cnx.envoyer("CONNECT OK");
+                    break;
+                /************************      Q4.2 ÉPARGNE       ******************************/
+                case "EPARGNE":
+                    // Fait par Nancy Nguyen
+                    /* Stratégie:
+                     *  1. Receuillir les informations du client (FAIT)
+                     *  2. Vérifier si le client est connecté (FAIT)
+                     *  3. Vérifier si le client possède un compte-épargne
+                     *  4. Générer un numéro unique pour le compte-épargne
+                     *  5. Créer un compte-épargne
+                     */
+
+                    // 1.Récupération des information du clients
+                    numCompteClient = cnx.getNumeroCompteClient();
+                    banque = serveurBanque.getBanque();
+
+                    //2. Vérifier si le client est connecté au serveur
+                    if (numCompteClient == null) {
+                        cnx.envoyer("EPARGNE NO");
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    /************************      Q6.1 DEPOT      ******************************/
+                case "DEPOT":
+                    // 1. Récupération des informations du client (Comme dans le case "NOUVEAU")
+                    argument = evenement.getArgument();
+                    t = argument.split(" ");
+                    if (t.length < 1) { // Si t == 1, il manque une information, et on sort du switch
+                        cnx.envoyer("DEPOT NO");
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+                    banque = serveurBanque.getBanque();
+                    numCompteClient = cnx.getNumeroCompteClient();
+                    double montant = Double.parseDouble(t[0]); // Nip associé au Compte-Client
+
+                    //2. Vérifier si le client est connecté au serveur
+                    if (numCompteClient == null) {
+                        cnx.envoyer("DEPOT NO");
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST Fonctionne et tester
+                        break;
+                    }
+                    // À tester
+                    banque.deposer(montant, numCompteClient);
+                    System.out.println(banque.deposer(montant, numCompteClient)); //TODO ENLEVER LE TEST
+
+                    break;
+
+
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
