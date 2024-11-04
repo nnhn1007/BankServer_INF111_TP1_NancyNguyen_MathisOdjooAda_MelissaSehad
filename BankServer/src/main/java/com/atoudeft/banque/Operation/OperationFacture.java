@@ -2,7 +2,7 @@ package com.atoudeft.banque.Operation;
 
 import com.atoudeft.banque.TypeOperation;
 
-public class OperationFacture extends Operation{
+public class OperationFacture extends Operation {
     private double montantFacture;
     private String numeroFacture;
     private String descriptionFacture;
@@ -16,8 +16,8 @@ public class OperationFacture extends Operation{
      */
     public OperationFacture(double montantFacture, String numeroFacture, String descriptionFacture) {
         super(TypeOperation.FACTURE);
-        this.montantFacture=montantFacture;
-        this.numeroFacture=numeroFacture;
-        this.descriptionFacture=descriptionFacture;
+        this.montantFacture = montantFacture;
+        this.numeroFacture = numeroFacture;
+        this.descriptionFacture = descriptionFacture;
     }
 }

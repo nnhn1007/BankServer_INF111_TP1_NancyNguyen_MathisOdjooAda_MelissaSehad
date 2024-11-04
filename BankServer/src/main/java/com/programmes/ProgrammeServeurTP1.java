@@ -1,9 +1,9 @@
 package com.programmes;
 
 import com.atoudeft.banque.CompteEpargne;
-import com.atoudeft.banque.Operation.*;
 import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.serveur.Config;
+import com.atoudeft.banque.Operation.*;
 import com.atoudeft.serveur.Serveur;
 import com.atoudeft.banque.serveur.ServeurBanque;
 
@@ -53,13 +53,14 @@ public class ProgrammeServeurTP1 {
         compteEpargne.ajouterInterets();
         System.out.println("Solde après avoir ajouté les intérets :"+compteEpargne.getSolde());
     */
-        /*
+
+    /*
         //Test sur les opérations
         OperationDepot operationDepotDepot= new OperationDepot(50.0);
         OperationRetrait operationRetrait = new OperationRetrait(50.0);
         OperationFacture operationFacture= new OperationFacture(50.0,"1234","Facture");
         OperationTransfer operationTransfer= new OperationTransfer(50.0,"ASD6BW1");
-        */
+    */
     }
 
 

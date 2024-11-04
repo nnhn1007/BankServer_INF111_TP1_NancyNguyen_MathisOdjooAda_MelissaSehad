@@ -175,7 +175,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         numCompteEpargne = CompteBancaire.genereNouveauNumero();
                     } while (banque.getCompteClient(numCompteEpargne) != null);
 
-                    CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
+         //         CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
                     //CompteClient.ajouter(numCompteEpargne); //????
                     cnx.envoyer("EPARGNE OK"); //inutile?
                     break;
