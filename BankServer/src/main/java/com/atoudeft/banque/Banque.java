@@ -114,8 +114,8 @@ public class Banque implements Serializable {
             System.out.println("Test NON2"); //TODO ENLEVER LE TEST
             return false;
         }
-        for (CompteClient compteClient : comptes) { // Il ne fonctionne pas
-            if (getCompteClient(numCompteClient) != null) {
+        for (int i=0; i< comptes.size(); i++) { // Fonctionne et tester
+            if (numeroEstValide(numCompteClient)) {
                 System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                 return false;
             }
@@ -145,5 +145,14 @@ public class Banque implements Serializable {
             return getCompteClient(numCompteClient).toString();
         }
         return null; // Retourne null si aucun-compte-chèque n'a été trouvé
+    }
+    public boolean numeroEstValide (String numDeCompte){
+        for (CompteClient compteClient : comptes) {
+            if(compteClient.getCompteDestinataire(numDeCompte)!= null) {
+                System.out.println("Test NON3"); //TODO ENLEVER LE TEST
+                return false;
+            }
+        }
+        return true;
     }
 }
