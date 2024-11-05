@@ -18,6 +18,6 @@ public class OperationTransfer extends Operation{
 
     //Q7.3 - Fait par Nancy Nguyen
     public String toString() {
-        return "DATE: " + getDate() + "     TYPE: " +  this.getType() + "     MONTANT: " +  this.montantTransfer;
+        return "DATE: " + getDate() + "    TYPE: " +  this.getType() + "    MONTANT: " +  this.montantTransfer;
     }
 }

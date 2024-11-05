@@ -16,6 +16,6 @@ public class OperationRetrait extends Operation{
 
     //Q7.3 - Fait par Nancy Nguyen
     public String toString() {
-        return "DATE: " + getDate() + "     TYPE: " +  this.getType() + "     MONTANT: " +  this.montantRetrait;
+        return "DATE: " + getDate() + "    TYPE: " +  this.getType() + "    MONTANT: " +  this.montantRetrait;
     }
 }
