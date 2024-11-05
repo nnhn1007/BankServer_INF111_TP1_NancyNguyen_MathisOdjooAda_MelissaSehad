@@ -8,7 +8,7 @@ package com.atoudeft.commun.evenement;
  * @since 2024-06-01
  */
 public class Evenement {
-    private Object source;
+    private final Object source;
     private final String type, argument;
 
     /**
