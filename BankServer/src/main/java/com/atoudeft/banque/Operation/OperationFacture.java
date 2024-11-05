@@ -20,4 +20,9 @@ public class OperationFacture extends Operation {
         this.numeroFacture = numeroFacture;
         this.descriptionFacture = descriptionFacture;
     }
+
+    //Q7.3 - Fait par Nancy Nguyen
+    public String toString() {
+        return "DATE: " + getDate() + "     TYPE: " +  this.getType() + "     MONTANT: " +  this.montantFacture;
+    }
 }

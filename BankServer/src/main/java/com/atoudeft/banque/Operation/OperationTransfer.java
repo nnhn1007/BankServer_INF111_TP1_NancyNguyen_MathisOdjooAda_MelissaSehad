@@ -15,4 +15,9 @@ public class OperationTransfer extends Operation{
         this.montantTransfer=montantTransfer;
         this.numeroCompteDestinataire=numeroCompteDestinataire;
     }
+
+    //Q7.3 - Fait par Nancy Nguyen
+    public String toString() {
+        return "DATE: " + getDate() + "     TYPE: " +  this.getType() + "     MONTANT: " +  this.montantTransfer;
+    }
 }

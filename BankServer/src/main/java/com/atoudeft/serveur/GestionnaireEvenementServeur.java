@@ -230,13 +230,11 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         System.out.println("Test NON2"); //TODO ENLEVER LE TEST Fonctionne et tester
                         break;
                     }
-                    // À tester
+                    //3. Effectuer le dépôt - À tester
                     banque.deposer(montant, numCompteClient);
                     System.out.println(banque.deposer(montant, numCompteClient)); //TODO ENLEVER LE TEST
 
                     break;
-
-
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
