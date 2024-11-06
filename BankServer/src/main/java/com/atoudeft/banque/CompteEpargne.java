@@ -68,11 +68,4 @@ public class CompteEpargne extends CompteBancaire {
         return false;
     }
 
-    /**
-     * Fait par Nancy Nguyen
-     * Permet de retourner le numéro d'un compte-épargne (pour la question 5.1)
-     * */
-    public String getNumeroCompteEpargne(){
-        return getNumero();
-    }
 }
