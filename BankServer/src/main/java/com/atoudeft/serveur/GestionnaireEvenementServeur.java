@@ -287,7 +287,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                      * Stratégie:
                      *  1. Récupérer les informations du client
                      *  2. Vérifier si le client est connecté au serveur
-                     *  3. PAYER LA FACTURE
+                     *  3. Payer la facture
                      */
 
                     //1. Récupération des informations du client
@@ -318,6 +318,45 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("FACTURE OK");
                     } else {
                         cnx.envoyer("FACTURE NO");
+                    }
+
+                    break;
+                /************************      Q6.4 TRANSFER      ******************************/
+                case "TRANSFER":
+                    /*
+                     * Stratégie:
+                     *  1. Récupérer les informations du client
+                     *  2. Vérifier si le client est connecté au serveur
+                     *  3. Effectuer le transfert
+                     */
+
+                    //1. Récupération des informations du client
+                    argument = evenement.getArgument();
+                    t = argument.split(" ", 3);
+                    if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant cpt1 cpt2
+                        cnx.envoyer("TRANSFER NO");
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    //Déclaration des variables
+                    montant = Double.parseDouble(t[0]);
+                    numCompteClient = t[1];
+                    String compteDestinaire = t[2];
+                    banque = serveurBanque.getBanque();
+
+                    //2. Vérifier si le client est connecté
+                    if (cnx.getNumeroCompteClient() != null) {
+                        cnx.envoyer("TRANSFER NO");
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    //3. Effectuer le transfert
+                    if(banque.transferer(montant, numCompteClient, compteDestinaire)){
+                        cnx.envoyer("TRANSFER OK");
+                    } else {
+                        cnx.envoyer("TRANSFER NO");
                     }
 
                     break;
