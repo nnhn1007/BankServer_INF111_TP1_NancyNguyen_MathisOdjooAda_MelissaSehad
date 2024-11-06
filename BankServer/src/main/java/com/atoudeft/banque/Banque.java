@@ -23,15 +23,18 @@ public class Banque implements Serializable {
      * @return le compte-client s'il a été trouvé. Sinon, retourne null
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
-        System.out.println("Recherche du compte : " + numeroCompteClient);
-        for (CompteClient compte : comptes) {
-            System.out.println("Compte présent dans la liste : " + compte.getNumero());
-            if (compte.getNumero().equals(numeroCompteClient)) {
-                return compte;
-            }
-        }
-        return null; // Retourne null si aucun compte correspondant n'est trouvé
-    }
+        CompteClient cpt = new CompteClient(numeroCompteClient, "");
+        int index = this.comptes.indexOf(cpt);
+        if (index != -1)
+            return this.comptes.get(index);
+        else
+            return null;
+          }
+    /**
+     * Fait par Mathis Odjo'o Ada
+     * @param numDeCompteClient
+     * @return
+     */
     public CompteClient getCompte(String numDeCompteClient){
         System.out.println("Recherche du compte : " + numDeCompteClient); //TODO TEST À SUPPRIMER.
         for (CompteClient compte : comptes) {
@@ -56,6 +59,7 @@ public class Banque implements Serializable {
     }
 
     /**
+     * Fait par Mathis Odjo'o Ada
      * Effectue un dépot d'argent dans un compte-bancaire
      *
      * @param montant      montant à déposer
@@ -114,6 +118,7 @@ public class Banque implements Serializable {
     }
 
     /**
+     * Fait par Mathis Odjo'o Ada
      * Crée un nouveau compte-client avec un numéro et un nip et l'ajoute à la liste des comptes.
      *
      * @param numCompteClient numéro du compte-client à créer
@@ -168,6 +173,11 @@ public class Banque implements Serializable {
         return numeroCompte; //Retourne le compte bancaire
     }
 
+    /**
+     * Fait par Mathis Odjo'o Ada
+     * @param numDeCompte
+     * @return
+     */
     public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
             if (!(compteClient.getCompteDestinataire(numDeCompte))) {

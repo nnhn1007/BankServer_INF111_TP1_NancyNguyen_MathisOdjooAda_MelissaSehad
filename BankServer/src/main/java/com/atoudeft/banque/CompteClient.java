@@ -40,14 +40,6 @@ public class CompteClient implements Serializable {
         return this.nip;
     } //Q3.1 - Ecq on peut l'ajouter??
 
-    /* public boolean numeroValide(String numeroDeCompte){
-         for (CompteBancaire compteBancaire: comptes){
-             if(compteBancaire.(numeroDeCompte)!=null){
-                 return false;
-             }
-         }
-         return true;
-     } /*
 
     /**
      * //TODO Ne pas oublier le constructeur.
@@ -63,6 +55,12 @@ public class CompteClient implements Serializable {
         }
         return true;
     }
+
+    /**
+     *
+     * @param typeCompte
+     * @return
+     */
     public CompteBancaire getCompteBancaire(TypeCompte typeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
             if (compteBancaire.getType() == typeCompte) {
@@ -71,6 +69,12 @@ public class CompteClient implements Serializable {
         }
         return null; // Si on ne trouve pas de compte bancaire relié
     }
+
+    /**
+     *
+     * @param numDeCompte
+     * @return
+     */
     public CompteBancaire getCompte(String numDeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
             if (compteBancaire.getNumero() == numero) {
