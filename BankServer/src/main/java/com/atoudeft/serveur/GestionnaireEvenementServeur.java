@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class GestionnaireEvenementServeur implements GestionnaireEvenement {
     private Serveur serveur;
+    final double TAUX_INTERET=0.05;
 
     /**
      * Construit un gestionnaire d'événements pour un serveur.
@@ -104,17 +105,19 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
 
-                    numCompteClient = t[0];
-                    nip = t[1];
+                    numCompteClient = t[0];  //Numéro de Compte-Client
+                    nip = t[1];              //Nip envoyé par le client
 
                     //Vérifier s'il y a un autre client déjà connecté sur ce compte
                     if (cnx.getNumeroCompteClient() != null){
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
                         break;
                     }
 
                     //Vérifier si le nip correspond au nip enregistré relié au compte-chèque
                     banque = serveurBanque.getBanque();
+                    //CompteClient compteClient = banque.getCompteClient(numCompteClient);
                     CompteClient compteClient = banque.getCompteClient(numCompteClient);
 
                     String nipEnregistré = compteClient.getNip();
@@ -152,28 +155,22 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
 
                     //3.Vérifier si le client a déjà un compte-épargne
-                    /*boolean compteEpargneExiste = false;
-                    for (CompteClient compte : banque.getComptes()){
-                        if (compte.getNumeroCompteClient().equals(numCompteClient) && compte instanceof CompteEpargne){
-                            compteEpargneExiste = true;
-                            break;
-                        }
+                    if(banque.getNumeroCompteParDefaut(numCompteClient)==null){
+                        cnx.envoyer("EPARGNE NO");
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
                     }
 
-                    if(compteEpargneExiste){
-                        cnx.envoyer("EPARGNE NO"); //le client possède déjà un compte-épargne
-                        break;
-                    } */
-
                     // Générer un numéro unique pour le compte-épargne
-                    String numCompteEpargne;
-                    do {
+                    String numCompteEpargne="";
+                    while (banque.getCompteClient(numCompteEpargne) != null) {
                         numCompteEpargne = CompteBancaire.genereNouveauNumero();
-                    } while (banque.getCompteClient(numCompteEpargne) != null);
+                    }
 
-                    //CompteEpargne nouveauCompteEpargne = new CompteEpargne(numCompteEpargne, 0.05);
-                    //CompteClient.ajouter(numCompteEpargne); //????
-                    cnx.envoyer("EPARGNE OK"); //inutile?
+                    compteClient= banque.getCompteClient(numCompteClient);
+                    CompteEpargne compteEpargne = (new CompteEpargne(numCompteEpargne, TypeCompte.EPARGNE,TAUX_INTERET));
+                    compteClient.ajouter(compteEpargne);
+                    cnx.envoyer("EPARGNE OK");
                     break;
 
                 /************************      Q5.1 SELECT       ******************************/
@@ -196,19 +193,22 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
 
                     //2. Recupération de l'argument de la commande (chèque ou épargne)
-                    argument = evenement.getArgument().toLowerCase(); //pour éviter les ambiguités
+                    argument = evenement.getArgument();
                     String numCompte;
                     TypeCompte typeCompte;
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompteClient(numCompteClient);
 
 
-                    if(argument.equals("chèque") ){
+                    if(argument.equals("CHEQUE") ){
+
                         typeCompte = TypeCompte.CHEQUE;
-                        numCompte = banque.getNumeroCompteParDefaut(cnx.getNumeroCompteClient()); //pas certaine
-                    } //else if (argument.equals("épargne") && compteClient instanceof CompteEpargne){
-                        //typeCompte = TypeCompte.EPARGNE;
-                   // }
+                        numCompte = banque.getNumeroCompteParDefaut(cnx.getNumeroCompteActuel());
+                    } //else if (argument.equals("EPARGNE") {
+
+                    typeCompte = TypeCompte.EPARGNE;
+                    numCompte= banque.getNumeroCompteParDefaut(cnx.getNumeroCompteActuel());
+                    //
 
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":

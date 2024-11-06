@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import com.atoudeft.banque.serveur.ConnexionBanque;
 
 public class CompteClient implements Serializable {
     private String numero;
@@ -31,6 +32,9 @@ public class CompteClient implements Serializable {
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
+    public String getNumero() {
+        return numero;
+    }
 
     public String getNip() {
         return this.nip;
@@ -45,19 +49,34 @@ public class CompteClient implements Serializable {
          return true;
      } /*
 
-     /**
-      *          //TODO Ne pas oublier le constructeur.
-      * @param numDeCompte
-      * @return
-      */
-    public CompteBancaire getCompteDestinataire(String numDeCompte) {
+    /**
+     * //TODO Ne pas oublier le constructeur.
+     *
+     * @param numDeCompte
+     * @return
+     */
+    public boolean getCompteDestinataire(String numDeCompte) {
+        for (CompteBancaire compteBancaire : comptes) {  //TODO À changer.
+            if ((numDeCompte.equals(getNumero()))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    public CompteBancaire getCompteBancaire(TypeCompte typeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
-            if (Objects.equals(compteBancaire.getNumero(), numDeCompte)) {
-                System.out.println("TEST CAS 2.1 :" + compteBancaire.getNumero());
+            if (compteBancaire.getType() == typeCompte) {
+                return compteBancaire;
+            }
+        }
+        return null; // Si on ne trouve pas de compte bancaire relié
+    }
+    public CompteBancaire getCompte(String numDeCompte) {
+        for (CompteBancaire compteBancaire : comptes) {
+            if (compteBancaire.getNumero() == numero) {
                 return compteBancaire;
             }
         }
         return null;
     }
-
 }

@@ -50,10 +50,10 @@ public class Banque implements Serializable {
      * @return true si le dépot s'est effectué correctement
      */
     public boolean deposer(double montant, String numeroCompte) { // À tester
-        CompteClient compteClient= getCompteClient(numeroCompte);
-        if(compteClient!=null){
-            // On dois la définir
-            throw new NotImplementedException(); // À enlever
+        CompteClient compteClient = getCompteClient(numeroCompte);
+        if (compteClient != null) {
+            //  (CompteBancaire) compteBancaire.crediter(montant);
+            return true;
         }
         return false;
     }
@@ -104,8 +104,8 @@ public class Banque implements Serializable {
     public boolean ajouter(String numCompteClient, String nip) {
         for (int i = 0; i < numCompteClient.length(); i++) {
             char caractere = numCompteClient.charAt(i);
-            if (!((caractere >= 'A' && caractere <= 'Z') || ((caractere>='0' && caractere<='9')))  ||  ( // Fonctionne et tester
-                    numCompteClient.length() < 6 || numCompteClient.length() > 8)){
+            if (!((caractere >= 'A' && caractere <= 'Z') || ((caractere >= '0' && caractere <= '9'))) || ( // Fonctionne et tester
+                    numCompteClient.length() < 6 || numCompteClient.length() > 8)) {
                 System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                 return false;
             }
@@ -114,11 +114,9 @@ public class Banque implements Serializable {
             System.out.println("Test NON2"); //TODO ENLEVER LE TEST
             return false;
         }
-        for (int i=0; i< comptes.size(); i++) { // Fonctionne et tester
-            if (numeroEstValide(numCompteClient)) {
-                System.out.println("Test NON3"); //TODO ENLEVER LE TEST
-                return false;
-            }
+        if (!numeroEstValide(numCompteClient)) {
+            System.out.println("Test NON3"); //TODO ENLEVER LE TEST
+            return false;
         }
 
         System.out.println("Test OUI"); //TODO ENLEVER LE TEST
@@ -128,6 +126,7 @@ public class Banque implements Serializable {
         System.out.println(numCompteBancaire);
         compteClient.ajouter(compteCheque);
         comptes.add(compteClient);
+        System.out.println("Test Encore : " + getNumeroCompteParDefaut(numCompteClient));
         return true;
     }
 
@@ -139,20 +138,24 @@ public class Banque implements Serializable {
      * @return numéro du compte-chèque du client ayant le numéro de compte-client
      */
     public String getNumeroCompteParDefaut(String numCompteClient) {
-        CompteClient compteClient =getCompteClient(numCompteClient);
-
-        if(compteClient != null){
-            return getCompteClient(numCompteClient).toString();
+        String numeroCompte = ""; // Initialise la valeur
+        CompteClient compteClient = getCompteClient(numCompteClient);
+        if (compteClient != null) {
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
+            if (compteBancaire != null) {
+                numeroCompte = compteBancaire.getNumero();
+            }
         }
-        return null; // Retourne null si aucun-compte-chèque n'a été trouvé
+        return numeroCompte; //Retourne le compte bancaire
     }
-    public boolean numeroEstValide (String numDeCompte){
+    public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
-            if(compteClient.getCompteDestinataire(numDeCompte)!= null) {
+            if (!(compteClient.getCompteDestinataire(numDeCompte))) {
                 System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
         return true;
     }
+
 }
