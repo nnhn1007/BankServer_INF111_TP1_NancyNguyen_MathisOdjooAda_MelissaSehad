@@ -281,7 +281,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
 
                     break;
-                /************************      Q6.2 RETRAIT      ******************************/
+                /************************      Q6.3 FACTURE      ******************************/
                 case "FACTURE":
                     /*
                      * Stratégie:
