@@ -1,5 +1,7 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.Operation.Operation;
+import com.atoudeft.banque.Operation.OperationDepot;
 import org.w3c.dom.ls.LSOutput;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -10,7 +12,7 @@ import java.util.List;
 public class Banque implements Serializable {
     private String nom;
     private List<CompteClient> comptes;
-
+    private TypeCompte type;
     public Banque(String nom) {
         this.nom = nom;
         this.comptes = new ArrayList<>();
@@ -69,7 +71,7 @@ public class Banque implements Serializable {
     public boolean deposer(double montant, String numeroCompte) { // À tester
         CompteClient compteClient = getCompte(numeroCompte);
         if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
 
             if (compteBancaire != null) {
                 System.out.println("Solde du début :"+ compteBancaire.getSolde());

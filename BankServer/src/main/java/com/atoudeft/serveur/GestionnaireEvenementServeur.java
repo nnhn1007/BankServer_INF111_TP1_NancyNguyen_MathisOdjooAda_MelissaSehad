@@ -182,7 +182,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                      *      opération réussie => SELECT OK
                      *      opération non réussie => SELECT NO
                      */
-
+                    CompteBancaire compteBancaire = null;
                     //1. Vérifier si le client est connecté
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
@@ -190,23 +190,31 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
 
-                    //2. Recupération de l'argument de la commande (chèque ou épargne)
+                    //3. Recupération de l'argument de la commande (chèque ou épargne)
                     argument = evenement.getArgument();
-                    String numCompte;
-                    TypeCompte typeCompte;
                     banque = serveurBanque.getBanque();
-                    compteClient = banque.getCompteClient(numCompteClient);
+                    compteClient = banque.getCompte(numCompteClient);
 
 
-                    if (argument.equals("CHEQUE")) {
+                    switch (argument) {
+                        case "cheque": {
+                            compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
+                            cnx.envoyer("SELECT OK");
+                            break;
+                        }
 
-                        typeCompte = TypeCompte.CHEQUE;
-                        numCompte = banque.getNumeroCompteParDefaut(cnx.getNumeroCompteActuel());
-                    } //else if (argument.equals("EPARGNE") {
+                        case "epargne": {
+                            compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);
+                            cnx.envoyer("SELECT OK");
+                            break;
+                        }
+                    }
+                    if (compteBancaire != null) {
+                        cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
+                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                    }
+                    break;
 
-                    typeCompte = TypeCompte.EPARGNE;
-                    numCompte = banque.getNumeroCompteParDefaut(cnx.getNumeroCompteActuel());
-                    //
 
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
@@ -229,6 +237,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
                     //3. Effectuer le dépôt - À tester
+
                     if (banque.deposer(montant, numCompteClient)) {
                         cnx.envoyer("DEPOT OK");
                     } else {
