@@ -267,12 +267,12 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     montant = Double.parseDouble(t[0]);
 
                     //2. Vérifier si le client est connecté
-                    if (cnx.getNumeroCompteClient() != null) {
+                    if (numCompteClient == null) {
                         cnx.envoyer("RETRAIT NO");
                         System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
-
+                    System.out.println("TEST ACCOUNT : "+ numCompteClient); //TODO RETIRER
                     //Retirer le montant demandé
                     if(banque.retirer(montant, numCompteClient)) {
                         cnx.envoyer("RETRAIT OK");
@@ -307,9 +307,21 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     numCompteClient = cnx.getNumeroCompteClient();
 
                     //2. Vérifier si le client est connecté
-                    if (cnx.getNumeroCompteClient() != null) {
+                    if (numCompteClient == null) {
                         cnx.envoyer("FACTURE NO");
                         System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+                    //3 Vérifier si numFact contient un numéro
+                    if(numFact==null){
+                        cnx.envoyer("FACTURE NO");
+                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+                    //4 Vérifier si la facture possède une description
+                    if(description==null){
+                        cnx.envoyer("FACTURE NO");
+                        System.out.println("Test NON4"); //TODO ENLEVER LE TEST
                         break;
                     }
 
