@@ -70,10 +70,9 @@ public class CompteEpargne extends CompteBancaire {
 
     /**
      * Fait par Nancy Nguyen
-     * Calcule les intérêts et les ajoute au solde
-     */
-    public void ajouterInterets() {
-        double interets = getSolde() * tauxInteret;
-        setSolde(getSolde() + interets);
+     * Permet de retourner le numéro d'un compte-épargne (pour la question 5.1)
+     * */
+    public String getNumeroCompteEpargne(){
+        return getNumero();
     }
 }
