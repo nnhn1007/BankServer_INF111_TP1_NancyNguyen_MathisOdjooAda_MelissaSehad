@@ -246,7 +246,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.2 RETRAIT      ******************************/
                 case "RETRAIT":
-                    /**
+                    /*
                      * Stratégie:
                      *  1. Récupérer les informations du client
                      *  2. Vérifier si le client est connecté au serveur
@@ -257,16 +257,19 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     t = argument.split(" ");
                     if (t.length < 1) { //Vérifie qu'il y a bien un montant
                         cnx.envoyer("RETRAIT NO"); //Il n'y a pas de montant à retirer
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
 
+                    //Déclaration des variables
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteClient();
                     montant = Double.parseDouble(t[0]);
 
                     //2. Vérifier si le client est connecté
                     if (cnx.getNumeroCompteClient() != null) {
-                        cnx.envoyer("NOUVEAU NO deja connecte");
+                        cnx.envoyer("RETRAIT NO");
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
 
@@ -275,6 +278,46 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("RETRAIT OK");
                     } else {
                         cnx.envoyer("RETRAIT NO");
+                    }
+
+                    break;
+                /************************      Q6.2 RETRAIT      ******************************/
+                case "FACTURE":
+                    /*
+                     * Stratégie:
+                     *  1. Récupérer les informations du client
+                     *  2. Vérifier si le client est connecté au serveur
+                     *  3. PAYER LA FACTURE
+                     */
+
+                    //1. Récupération des informations du client
+                    argument = evenement.getArgument();
+                    t = argument.split(" ", 3);
+                    if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant NUMFACT Description
+                        cnx.envoyer("FACTURE NO");
+                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    //Déclaration des variables
+                    montant = Double.parseDouble(t[0]);
+                    String numFact = t[1];
+                    String description = t[2];
+                    banque = serveurBanque.getBanque();
+                    numCompteClient = cnx.getNumeroCompteClient();
+
+                    //2. Vérifier si le client est connecté
+                    if (cnx.getNumeroCompteClient() != null) {
+                        cnx.envoyer("FACTURE NO");
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    //Paiement de la facture
+                    if(banque.payerFacture(montant, numCompteClient, numFact, description)){
+                        cnx.envoyer("FACTURE OK");
+                    } else {
+                        cnx.envoyer("FACTURE NO");
                     }
 
                     break;
