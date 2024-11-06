@@ -1,7 +1,7 @@
 package com.atoudeft.serveur;
 
 import com.atoudeft.banque.*;
-import com.atoudeft.banque.serveur.ConnexionBanque;
+        import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
@@ -244,7 +244,42 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("DEPOT NO");
                     }
                     break;
+                /************************      Q6.2 RETRAIT      ******************************/
+                case "RETRAIT":
+                    /**
+                     * Stratégie:
+                     *  1. Récupérer les informations du client
+                     *  2. Vérifier si le client est connecté au serveur
+                     *  3. Effectuer le retait
+                     */
+                    //1. Récupération des informations du client
+                    argument = evenement.getArgument();
+                    t = argument.split(" ");
+                    if (t.length < 1) { //Vérifie qu'il y a bien un montant
+                        cnx.envoyer("RETRAIT NO"); //Il n'y a pas de montant à retirer
+                        break;
+                    }
+
+                    banque = serveurBanque.getBanque();
+                    numCompteClient = cnx.getNumeroCompteClient();
+                    montant = Double.parseDouble(t[0]);
+
+                    //2. Vérifier si le client est connecté
+                    if (cnx.getNumeroCompteClient() != null) {
+                        cnx.envoyer("NOUVEAU NO deja connecte");
+                        break;
+                    }
+
+                    //Retirer le montant demandé
+                    if(banque.retirer(montant, numCompteClient)) {
+                        cnx.envoyer("RETRAIT OK");
+                    } else {
+                        cnx.envoyer("RETRAIT NO");
+                    }
+
+                    break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
+
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
                     cnx.envoyer(msg);
