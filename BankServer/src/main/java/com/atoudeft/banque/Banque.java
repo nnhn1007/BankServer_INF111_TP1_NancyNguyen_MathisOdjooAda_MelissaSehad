@@ -23,12 +23,25 @@ public class Banque implements Serializable {
      * @return le compte-client s'il a été trouvé. Sinon, retourne null
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
-        CompteClient cpt = new CompteClient(numeroCompteClient, "");
-        int index = this.comptes.indexOf(cpt);
-        if (index != -1)
-            return this.comptes.get(index);
-        else
-            return null;
+        System.out.println("Recherche du compte : " + numeroCompteClient);
+        for (CompteClient compte : comptes) {
+            System.out.println("Compte présent dans la liste : " + compte.getNumero());
+            if (compte.getNumero().equals(numeroCompteClient)) {
+                return compte;
+            }
+        }
+        return null; // Retourne null si aucun compte correspondant n'est trouvé
+    }
+    public CompteClient getCompte(String numDeCompteClient){
+        System.out.println("Recherche du compte : " + numDeCompteClient); //TODO TEST À SUPPRIMER.
+        for (CompteClient compte : comptes) {
+            System.out.println("Compte présent dans la liste : " + compte.getNumero()); //TODO TEST À SUPPRIMER.
+
+            if (compte.getNumero().equals(numDeCompteClient)) {
+                return compte;
+            }
+        }
+        return null; // Retourne null si aucun compte client n'est trouvé
     }
 
     /**
@@ -50,10 +63,16 @@ public class Banque implements Serializable {
      * @return true si le dépot s'est effectué correctement
      */
     public boolean deposer(double montant, String numeroCompte) { // À tester
-        CompteClient compteClient = getCompteClient(numeroCompte);
+        CompteClient compteClient = getCompte(numeroCompte);
         if (compteClient != null) {
-            //  (CompteBancaire) compteBancaire.crediter(montant);
-            return true;
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
+
+            if (compteBancaire != null) {
+                System.out.println("Solde du début :"+ compteBancaire.getSolde());
+                compteBancaire.crediter(montant);
+                System.out.println(compteBancaire.getSolde());
+                return true;
+            }
         }
         return false;
     }
@@ -148,6 +167,7 @@ public class Banque implements Serializable {
         }
         return numeroCompte; //Retourne le compte bancaire
     }
+
     public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
             if (!(compteClient.getCompteDestinataire(numDeCompte))) {
