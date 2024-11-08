@@ -47,11 +47,37 @@ public class CompteCheque extends CompteBancaire {
         return false;
     }
 
+    /**
+     * Fait par Mathis
+     * Facture un montant en utilisant le solde disponible en vérifiant
+     * d'abord si numeroFacture est nulle, si le solde est suffisant si
+     * et la description est non nulle.
+     *
+     * @param numeroFacture le numéro de la facture à payer
+     * @param montant       le montant de la facture à payer
+     * @param description   une description de la facture
+     * @return true si la facture a été payée avec succès, sinon return false
+     */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
+        if (getSolde() > montant) {
+            if (numeroFacture != null) {
+                if (description != null) {
+                    debiter(montant);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
+    /**
+     *
+     *
+     * @param montant
+     * @param numeroCompteDestinataire
+     * @return
+     */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
         return false;

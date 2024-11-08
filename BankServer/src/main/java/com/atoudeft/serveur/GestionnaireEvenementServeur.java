@@ -1,7 +1,7 @@
 package com.atoudeft.serveur;
 
 import com.atoudeft.banque.*;
-        import com.atoudeft.banque.serveur.ConnexionBanque;
+import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
@@ -107,12 +107,22 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     numCompteClient = t[0];  //Numéro de Compte-Client
                     nip = t[1];              //Nip envoyé par le client
-
+                    banque = serveurBanque.getBanque();
                     //Vérifier s'il y a un autre client déjà connecté sur ce compte
-                    if (cnx.getNumeroCompteClient() != null) {
+                    if (banque.getCompte(numCompteClient) == null) {
                         System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
                         break;
+                    }
+                    if (cnx.getNumeroCompteClient() != null) {
+                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
+                        break;
+                    }
+
+                    if ((banque.numeroEstValide(numCompteClient))) {
+                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
+                        cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
                     }
 
                     //Vérifier si le nip correspond au nip enregistré relié au compte-chèque
@@ -122,6 +132,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     String nipEnregistré = compteClient2.getNip();
                     if (!nipEnregistré.equals(nip)) {
                         cnx.envoyer("CONNECT NO"); //Le nip enregistré est différent au nip entré
+                        System.out.println("Test NON4"); //TODO ENLEVER LE TEST
                         break;
                     }
 
@@ -216,7 +227,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
 
 
-                    /************************      Q6.1 DEPOT      ******************************/
+                /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
                     // 1. Récupération des informations du client (Comme dans le case "NOUVEAU")
                     argument = evenement.getArgument();
@@ -272,9 +283,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
-                    System.out.println("TEST ACCOUNT : "+ numCompteClient); //TODO RETIRER
+                    System.out.println("TEST ACCOUNT : " + numCompteClient); //TODO RETIRER
                     //Retirer le montant demandé
-                    if(banque.retirer(montant, numCompteClient)) {
+                    if (banque.retirer(montant, numCompteClient)) {
                         cnx.envoyer("RETRAIT OK");
                     } else {
                         cnx.envoyer("RETRAIT NO");
@@ -313,20 +324,20 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
                     //3 Vérifier si numFact contient un numéro
-                    if(numFact==null){
+                    if (numFact == null) {
                         cnx.envoyer("FACTURE NO");
                         System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                         break;
                     }
                     //4 Vérifier si la facture possède une description
-                    if(description==null){
+                    if (description == null) {
                         cnx.envoyer("FACTURE NO");
                         System.out.println("Test NON4"); //TODO ENLEVER LE TEST
                         break;
                     }
 
                     //Paiement de la facture
-                    if(banque.payerFacture(montant, numCompteClient, numFact, description)){
+                    if (banque.payerFacture(montant, numCompteClient, numFact, description)) {
                         cnx.envoyer("FACTURE OK");
                     } else {
                         cnx.envoyer("FACTURE NO");
@@ -365,7 +376,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
 
                     //3. Effectuer le transfert
-                    if(banque.transferer(montant, numCompteClient, compteDestinaire)){
+                    if (banque.transferer(montant, numCompteClient, compteDestinaire)) {
                         cnx.envoyer("TRANSFER OK");
                     } else {
                         cnx.envoyer("TRANSFER NO");
