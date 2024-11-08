@@ -257,7 +257,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.2 RETRAIT      ******************************/
                 case "RETRAIT":
-                    /*
+                    /* Fait par Nancy Nguyen
                      * Stratégie:
                      *  1. Récupérer les informations du client
                      *  2. Vérifier si le client est connecté au serveur
@@ -294,7 +294,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.3 FACTURE      ******************************/
                 case "FACTURE":
-                    /*
+                    /* Fait par Nancy Nguyen
                      * Stratégie:
                      *  1. Récupérer les informations du client
                      *  2. Vérifier si le client est connecté au serveur
@@ -346,7 +346,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.4 TRANSFER      ******************************/
                 case "TRANSFER":
-                    /*
+                    /* Fait par Nancy Nguyen
                      * Stratégie:
                      *  1. Récupérer les informations du client
                      *  2. Vérifier si le client est connecté au serveur
