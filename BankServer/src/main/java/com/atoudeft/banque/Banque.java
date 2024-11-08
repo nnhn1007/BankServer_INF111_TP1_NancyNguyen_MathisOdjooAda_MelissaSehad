@@ -13,6 +13,7 @@ public class Banque implements Serializable {
     private String nom;
     private List<CompteClient> comptes;
     private TypeCompte type;
+
     public Banque(String nom) {
         this.nom = nom;
         this.comptes = new ArrayList<>();
@@ -31,13 +32,15 @@ public class Banque implements Serializable {
             return this.comptes.get(index);
         else
             return null;
-          }
+    }
+
     /**
      * Fait par Mathis Odjo'o Ada
+     *
      * @param numDeCompteClient
      * @return
      */
-    public CompteClient getCompte(String numDeCompteClient){
+    public CompteClient getCompte(String numDeCompteClient) {
         System.out.println("Recherche du compte : " + numDeCompteClient); //TODO TEST À SUPPRIMER.
         for (CompteClient compte : comptes) {
             System.out.println("Compte présent dans la liste : " + compte.getNumero()); //TODO TEST À SUPPRIMER.
@@ -70,11 +73,12 @@ public class Banque implements Serializable {
      */
     public boolean deposer(double montant, String numeroCompte) { // À tester
         CompteClient compteClient = getCompte(numeroCompte);
+
         if (compteClient != null) {
             CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
 
             if (compteBancaire != null) {
-                System.out.println("Solde du début :"+ compteBancaire.getSolde());
+                System.out.println("Solde du début :" + compteBancaire.getSolde());
                 compteBancaire.crediter(montant);
                 System.out.println(compteBancaire.getSolde());
                 return true;
@@ -144,15 +148,7 @@ public class Banque implements Serializable {
             System.out.println("Test NON3"); //TODO ENLEVER LE TEST
             return false;
         }
-
-        System.out.println("Test OUI"); //TODO ENLEVER LE TEST
-        CompteClient compteClient = new CompteClient(numCompteClient, nip);
-        String numCompteBancaire = CompteBancaire.genereNouveauNumero();
-        CompteCheque compteCheque = new CompteCheque(numCompteBancaire, TypeCompte.CHEQUE);
-        System.out.println(numCompteBancaire);
-        compteClient.ajouter(compteCheque);
-        comptes.add(compteClient);
-        System.out.println("Test Encore : " + getNumeroCompteParDefaut(numCompteClient));
+        creationDeCompte(numCompteClient, nip);
         return true;
     }
 
@@ -177,17 +173,28 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
+     *
      * @param numDeCompte
      * @return
      */
     public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
             if (!(compteClient.getCompteDestinataire(numDeCompte))) {
-                System.out.println("Test NON3"); //TODO ENLEVER LE TEST
+                System.out.println("Test NONINC"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
         return true;
     }
 
+    private void creationDeCompte(String numCompteClient, String nip) {
+        System.out.println("Test OUI"); //TODO ENLEVER LE TEST
+        CompteClient compteClient = new CompteClient(numCompteClient, nip);
+        String numCompteBancaire = CompteBancaire.genereNouveauNumero();
+        CompteCheque compteCheque = new CompteCheque(numCompteBancaire, TypeCompte.CHEQUE);
+        System.out.println(numCompteBancaire);
+        compteClient.ajouter(compteCheque);
+        comptes.add(compteClient);
+        System.out.println("Test Encore : " + compteClient.getNumero());
+    }
 }
