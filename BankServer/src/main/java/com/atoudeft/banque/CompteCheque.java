@@ -60,26 +60,21 @@ public class CompteCheque extends CompteBancaire {
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        if (getSolde() > montant) {
-            if (numeroFacture != null) {
-                if (description != null) {
-                    debiter(montant);
-                    return true;
-                }
-            }
+        if (getSolde() > montant && numeroFacture != null && description != null) {
+            debiter(montant);
+            return true;
         }
         return false;
     }
 
     /**
-     *
-     *
      * @param montant
      * @param numeroCompteDestinataire
      * @return
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
+
         return false;
     }
 }

@@ -6,6 +6,7 @@ public abstract class CompteBancaire implements Serializable {
     private String numero;
     private TypeCompte type;
     private double solde;
+    private TypeCompte typeDeCompte;
 
     /**
      * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
@@ -42,6 +43,11 @@ public abstract class CompteBancaire implements Serializable {
     }
     public double getSolde() {
         return solde;
+    }
+
+    // Méthode pour obtenir le type de compte
+    public TypeCompte getTypeDeCompte() {
+        return typeDeCompte;
     }
     public double setSolde(double solde) {
         return this.solde = solde;
