@@ -72,10 +72,9 @@ public class CompteClient implements Serializable {
 
     /**
      *
-     * @param numDeCompte
      * @return
      */
-    public CompteBancaire getCompte(String numDeCompte) {
+    public CompteBancaire getCompte(String numeroDeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
             if (compteBancaire.getNumero() == numero) {
                 return compteBancaire;
@@ -83,4 +82,5 @@ public class CompteClient implements Serializable {
         }
         return null;
     }
+
 }

@@ -193,13 +193,16 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                      *      opération réussie => SELECT OK
                      *      opération non réussie => SELECT NO
                      */
-                    CompteBancaire compteBancaire = null;
+
                     //1. Vérifier si le client est connecté
+                    CompteBancaire compteBancaire = null;
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        System.out.println("INNIT?");
                         break;
                     }
+
 
                     //3. Recupération de l'argument de la commande (chèque ou épargne)
                     argument = evenement.getArgument();
@@ -208,25 +211,25 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
 
                     switch (argument) {
-                        case "cheque": {
+                        case "CHEQUE": {
                             compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
-                            cnx.envoyer("SELECT OK");
                             break;
                         }
 
-                        case "epargne": {
+                        case "EPARGNE": {
                             compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);
-                            cnx.envoyer("SELECT OK");
                             break;
                         }
                     }
                     if (compteBancaire != null) {
                         cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
-                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        cnx.envoyer("SELECT OK"); // le client n'est pas connecté
+                        break;
                     }
-                    break;
-
-
+                    else{
+                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        break;
+                    }
                 /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
                     // 1. Récupération des informations du client (Comme dans le case "NOUVEAU")

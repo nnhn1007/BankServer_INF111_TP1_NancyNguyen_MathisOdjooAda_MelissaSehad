@@ -59,8 +59,14 @@ public class Banque implements Serializable {
      * @param numeroCompteClient   numéro du compte-client
      * @return true si le compte-bancaire appartient au compte-client
      */
+    //TODO À vérifier
     public boolean appartientA(String numeroCompteBancaire, String numeroCompteClient) {
-        throw new NotImplementedException();
+        CompteClient compteClient = getCompteClient(numeroCompteClient);
+
+        if (compteClient.getCompteDestinataire(numeroCompteBancaire)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -73,9 +79,10 @@ public class Banque implements Serializable {
      */
     public boolean deposer(double montant, String numeroCompte) { // À tester
         CompteClient compteClient = getCompte(numeroCompte);
+        CompteBancaire compteBancaire=getCompteBancaire(numeroCompte);
 
-        if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
+        if (compteBancaire != null) {
+            compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
 
             if (compteBancaire != null) {
                 System.out.println("Solde du début :" + compteBancaire.getSolde());
@@ -95,7 +102,19 @@ public class Banque implements Serializable {
      * @return true si le retrait s'est effectué correctement
      */
     public boolean retirer(double montant, String numeroCompte) {
-        throw new NotImplementedException();
+        CompteClient compteClient = getCompte(numeroCompte);
+
+        if (compteClient != null) {
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
+
+            if (compteBancaire != null) {
+                System.out.println("Solde du début (RETIRER) :" + compteBancaire.getSolde());
+                compteBancaire.debiter(montant);
+                System.out.println(compteBancaire.getSolde());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -134,13 +153,14 @@ public class Banque implements Serializable {
     public boolean ajouter(String numCompteClient, String nip) {
         for (int i = 0; i < numCompteClient.length(); i++) {
             char caractere = numCompteClient.charAt(i);
-            if (!((caractere >= 'A' && caractere <= 'Z') || ((caractere >= '0' && caractere <= '9'))) || ( // Fonctionne et tester
+            if (!((caractere >= 'A' && caractere <= 'Z') ||
+                    ((caractere >= '0' && caractere <= '9'))) || (
                     numCompteClient.length() < 6 || numCompteClient.length() > 8)) {
                 System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
-        if (!nip.matches("[0-9]+") || (nip.length() < 4 || nip.length() > 5)) {  //Fonctionne et tester
+        if (!nip.matches("[0-9]+") || (nip.length() < 4 || nip.length() > 5)) {
             System.out.println("Test NON2"); //TODO ENLEVER LE TEST
             return false;
         }
@@ -180,7 +200,7 @@ public class Banque implements Serializable {
     public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
             if (!(compteClient.getCompteDestinataire(numDeCompte))) {
-                System.out.println("Test NONINC"); //TODO ENLEVER LE TEST
+                System.out.println("Test NON"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
@@ -196,5 +216,16 @@ public class Banque implements Serializable {
         compteClient.ajouter(compteCheque);
         comptes.add(compteClient);
         System.out.println("Test Encore : " + compteClient.getNumero());
+    }
+
+    private CompteBancaire getCompteBancaire(String numDeCompteBancaire) {
+        CompteBancaire compteBancaire=null;
+        for (CompteClient compteClient : comptes) {
+            if(compteClient.getCompte(numDeCompteBancaire)!=null){
+                compteBancaire= compteClient.getCompte(numDeCompteBancaire);
+                return compteBancaire;
+            }
+        }
+        return null;
     }
 }
