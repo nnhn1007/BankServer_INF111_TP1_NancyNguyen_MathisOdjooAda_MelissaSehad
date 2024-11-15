@@ -60,7 +60,11 @@ public class Banque implements Serializable {
      * @return true si le compte-bancaire appartient au compte-client
      */
     public boolean appartientA(String numeroCompteBancaire, String numeroCompteClient) {
-        throw new NotImplementedException();
+        CompteClient compteClient = getCompteClient(numeroCompteClient);
+        if (compteClient.getCompteDestinataire(numeroCompteBancaire)) {
+            return true;
+        }
+        return false;
     }
 
     /**
