@@ -14,11 +14,10 @@ public class Noeud implements Serializable {
      * Constructeur de la classe Noeud
      *
      * @param operation    L'operation a stocker dans le noeud
-     * @param noeudSuivant Le noeud suivant dans la pile
      */
-    public Noeud(Operation operation, Noeud noeudSuivant) {
+    public Noeud(Operation operation) {
         this.operation = operation;
-        this.noeudSuivant = noeudSuivant;
+        this.noeudSuivant = null;
     }
 
     /**

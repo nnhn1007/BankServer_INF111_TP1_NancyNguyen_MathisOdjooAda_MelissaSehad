@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.atoudeft.banque.Operation.Operation;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 
 public class CompteClient implements Serializable {
@@ -80,10 +81,6 @@ public class CompteClient implements Serializable {
             }
         }
         return null;
-    }
-
-    public List<String> getHistoriqueOperations() {
-        return historiqueOperations;
     }
 
     /**

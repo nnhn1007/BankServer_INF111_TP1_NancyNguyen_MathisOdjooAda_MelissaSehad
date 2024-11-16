@@ -1,5 +1,8 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.Operation.OperationDepot;
+import com.atoudeft.banque.Operation.OperationRetrait;
+
 public class CompteCheque extends CompteBancaire {
     private final int ZERO = 0;
 
@@ -74,7 +77,10 @@ public class CompteCheque extends CompteBancaire {
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
-
+        if (getSolde() > montant && montant > ZERO) {
+            setSolde(getSolde() - montant);
+            return true;
+        }
         return false;
     }
 }

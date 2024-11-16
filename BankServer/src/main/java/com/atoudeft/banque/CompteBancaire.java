@@ -1,12 +1,19 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.Operation.Noeud;
+import com.atoudeft.banque.Operation.Operation;
+import com.atoudeft.banque.Operation.PileChainee;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CompteBancaire implements Serializable {
     private String numero;
     private TypeCompte type;
     private double solde;
     private TypeCompte typeDeCompte;
+    private PileChainee historique;
 
     /**
      * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
@@ -34,6 +41,7 @@ public abstract class CompteBancaire implements Serializable {
         this.numero = numero;
         this.type = type;
         this.solde = 0;
+        this.historique=new PileChainee();
     }
     public String getNumero() {
         return numero;
@@ -49,6 +57,14 @@ public abstract class CompteBancaire implements Serializable {
     public TypeCompte getTypeDeCompte() {
         return typeDeCompte;
     }
+    public void ajouterOperation(Operation operation){
+        historique.empiler(operation);
+    }
+    public ArrayList<Operation> afficherHistoriqueOperation(){
+        return historique.getHistoriqueOperation();
+    }
+
+
     public double setSolde(double solde) {
         return this.solde = solde;
     }

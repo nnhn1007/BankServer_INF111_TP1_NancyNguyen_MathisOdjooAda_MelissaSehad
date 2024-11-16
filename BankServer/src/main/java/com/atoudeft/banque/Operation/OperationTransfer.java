@@ -12,7 +12,7 @@ public class OperationTransfer extends Operation implements Serializable {
     private final String numeroCompteDestinataire;
 
     /**
-     * Constructeur de l;operation de transfer bancaire
+     * Constructeur de l'opération de transfer bancaire
      *
      * @param montantTransfer          Le montant du transfer
      * @param numeroCompteDestinataire Le numero de compte du destinataire

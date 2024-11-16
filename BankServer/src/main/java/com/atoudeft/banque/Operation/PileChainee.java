@@ -1,6 +1,7 @@
 package com.atoudeft.banque.Operation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * La classe PileChainee est une classe qui represente une pile chainee d'operation banacaire
@@ -9,6 +10,10 @@ import java.io.Serializable;
 public class PileChainee implements Serializable {
     private Noeud elementSommet;
 
+    public PileChainee() {
+        this.elementSommet = null;
+    }
+
     /**
      * Fait par Melissa Sehad
      * Methode qui empile une nouvelle operation au sommet de la pile chainee
@@ -16,22 +21,23 @@ public class PileChainee implements Serializable {
      * @param operation L'operation banncaire a empiler
      */
     public void empiler(Operation operation) {
-        elementSommet = new Noeud(operation, elementSommet);
+        Noeud suivant = new Noeud(operation); //PS : Valeur temporaire (TEMP)
+        suivant.setNoeudSuivant(elementSommet);
+        elementSommet = suivant;
     }
-
-    /**
-     * Fait par Melissa Sehad
-     * Methode qui retourne l'operation depiler au sommet de la pile chainee
-     *
-     * @return l'operation qui est depile
-     */
-    public Operation depiler() throws Exception {
-        if (pileVide()) {
-            return null;
+    public Operation getSommetDePile(){
+        if(elementSommet!=null){
+           return elementSommet.getOperation();
         }
-        Operation operation = elementSommet.getOperation();
-        elementSommet = elementSommet.getNoeudSuivant();
-        return operation;
+        return null;
+    }
+    public ArrayList<Operation> getHistoriqueOperation(){
+        ArrayList<Operation> historiqueOperation = new ArrayList<>();
+        while(elementSommet!=null){
+            historiqueOperation.add(elementSommet.getOperation());
+            elementSommet= elementSommet.getNoeudSuivant();
+        }
+        return historiqueOperation;
     }
 
     /**
@@ -40,21 +46,7 @@ public class PileChainee implements Serializable {
      *
      * @return true si la pile chainee est vide, sinon false
      */
-    public boolean pileVide() {
+    public boolean estVide() {
         return elementSommet == null;
     }
-
-    /**
-     * Fait par Melissa Sehad
-     * Methode qui retourne l'opération au sommet de la pile sans la dépiler.
-     *
-     * @return l'opération au sommet de la pile
-     */
-    public Operation voirElementSommet() {
-        if (pileVide()) {
-            return null;
-        }
-        return elementSommet.getOperation();
-    }
-
 }

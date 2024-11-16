@@ -1,5 +1,10 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.Operation.OperationDepot;
+import com.atoudeft.banque.Operation.OperationFacture;
+import com.atoudeft.banque.Operation.OperationRetrait;
+import com.atoudeft.banque.Operation.OperationTransfer;
+
 public class CompteEpargne extends CompteBancaire {
     private final int ZERO = 0;
     private final double tauxInteret; //En pourcentage !
@@ -32,7 +37,6 @@ public class CompteEpargne extends CompteBancaire {
             setSolde(getSolde() + montant);
             return true;
         }
-
         return false;
     }
 
@@ -71,8 +75,8 @@ public class CompteEpargne extends CompteBancaire {
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        if (getSolde() > (montant + FRAIS) && numeroFacture != null && description != null) {
-            debiter(montant);
+        if (getSolde() > (montant + FRAIS) && montant > ZERO) {
+            setSolde(getSolde() - montant);
             return true;
         }
         return false;
@@ -85,6 +89,10 @@ public class CompteEpargne extends CompteBancaire {
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
+        if (getSolde() > (montant + FRAIS) && montant > ZERO) {
+            setSolde(getSolde() - montant);
+            return true;
+        }
         return false;
     }
 
