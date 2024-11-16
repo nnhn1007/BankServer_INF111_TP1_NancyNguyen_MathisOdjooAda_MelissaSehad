@@ -372,9 +372,16 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     banque = serveurBanque.getBanque();
 
                     //2. Vérifier si le client est connecté
-                    if (cnx.getNumeroCompteClient() != null) {
+                    if (cnx.getNumeroCompteClient() == null) {
                         cnx.envoyer("TRANSFER NO");
                         System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        break;
+                    }
+
+                    if(banque.numeroEstValide(numCompteClient) ||
+                            banque.numeroEstValide(compteDestinaire)){
+                        cnx.envoyer("TRANSFER NO");
+                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                         break;
                     }
 
