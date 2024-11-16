@@ -47,7 +47,7 @@ public class CompteEpargne extends CompteBancaire {
     @Override
     public boolean debiter(double montant) { // À tester
         double soldeInitial = getSolde();
-        if (montant > ZERO && getSolde() >= montant) {
+        if (montant > ZERO && getSolde() > (montant + FRAIS)) {
             setSolde(getSolde() - montant); //Débite le montant du solde
             if (soldeInitial < LIMITE) {
                 setSolde(getSolde() - FRAIS); //Débite les frais si getSolde()<1000
@@ -71,7 +71,7 @@ public class CompteEpargne extends CompteBancaire {
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        if (getSolde() > montant && numeroFacture != null && description != null) {
+        if (getSolde() > (montant + FRAIS) && numeroFacture != null && description != null) {
             debiter(montant);
             return true;
         }
@@ -79,7 +79,6 @@ public class CompteEpargne extends CompteBancaire {
     }
 
     /**
-     *
      * @param montant
      * @param numeroCompteDestinataire
      * @return

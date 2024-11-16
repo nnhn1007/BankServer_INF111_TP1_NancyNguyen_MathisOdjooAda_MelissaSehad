@@ -2,6 +2,8 @@ package com.atoudeft.banque;
 
 import com.atoudeft.banque.Operation.Operation;
 import com.atoudeft.banque.Operation.OperationDepot;
+import com.atoudeft.banque.Operation.OperationFacture;
+import com.atoudeft.banque.Operation.OperationRetrait;
 import org.w3c.dom.ls.LSOutput;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -80,11 +82,11 @@ public class Banque implements Serializable {
 
         if (compteClient != null) {
             CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
-
             if (compteBancaire != null) {
                 System.out.println("Solde du début :" + compteBancaire.getSolde());
                 compteBancaire.crediter(montant);
                 System.out.println(compteBancaire.getSolde());
+                OperationDepot operationDepot = new OperationDepot(montant);
                 return true;
             }
         }
@@ -99,7 +101,17 @@ public class Banque implements Serializable {
      * @return true si le retrait s'est effectué correctement
      */
     public boolean retirer(double montant, String numeroCompte) {
-        throw new NotImplementedException();
+        CompteClient compteClient = getCompte(numeroCompte);
+        if (compteClient != null) {
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
+            if (compteBancaire != null && compteBancaire.debiter(montant)) {
+                System.out.println("Solde du début (RETIRER) :" + compteBancaire.getSolde()); //TODO à enlever
+                System.out.println(compteBancaire.getSolde());
+                OperationRetrait operationRetrait = new OperationRetrait(montant);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -124,7 +136,17 @@ public class Banque implements Serializable {
      * @return true si le paiement s'est bien effectuée
      */
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
-        throw new NotImplementedException();
+        CompteClient compteClient = getCompte(numeroCompte);
+        if (compteClient != null) {
+            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
+            if (compteBancaire != null && compteBancaire.payerFacture(numeroFacture, montant, description)) {
+                System.out.println("Solde du début (RETIRER) :" + compteBancaire.getSolde()); //TODO à enlever
+                System.out.println(compteBancaire.getSolde());
+                OperationFacture operationFacture = new OperationFacture(montant, numeroFacture, description);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -200,5 +222,18 @@ public class Banque implements Serializable {
         compteClient.ajouter(compteCheque);
         comptes.add(compteClient);
         System.out.println("Test Encore : " + compteClient.getNumero());
+    }
+
+    public CompteBancaire getCompteBancaire(String numCompteBancaire) {
+        CompteBancaire compteBancaire;
+
+        for (CompteClient compteClient : comptes) {
+            if (compteClient.getCompte(numCompteBancaire) != null) {
+                compteBancaire = compteClient.getCompte(numCompteBancaire);
+                return compteBancaire;
+            }
+
+        }
+        return null;
     }
 }
