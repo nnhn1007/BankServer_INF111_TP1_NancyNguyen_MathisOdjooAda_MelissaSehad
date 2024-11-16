@@ -50,8 +50,8 @@ public class Noeud implements Serializable {
     public void setNoeudSuivant(Noeud noeudSuivant) {
         this.noeudSuivant = noeudSuivant;
     }
-    public String toString(){
+
+    public String toString() {
         return "Noeud : " + operation.toString();
     }
-
 }

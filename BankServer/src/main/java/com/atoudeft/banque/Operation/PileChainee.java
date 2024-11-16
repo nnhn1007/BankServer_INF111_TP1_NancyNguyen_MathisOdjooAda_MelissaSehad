@@ -51,7 +51,7 @@ public class PileChainee implements Serializable {
      * @return l'opération au sommet de la pile
      */
     public Operation voirElementSommet() {
-        if (pileVide()){
+        if (pileVide()) {
             return null;
         }
         return elementSommet.getOperation();

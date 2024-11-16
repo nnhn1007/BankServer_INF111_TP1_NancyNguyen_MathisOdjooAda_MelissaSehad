@@ -12,7 +12,7 @@ public class OperationRetrait extends Operation implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Constructeur de l;operation de retrait bancaire
+     * Constructeur de l'opération de retrait bancaire
      *
      * @param montantRetrait Le type de l'Opération que le client veut exécuter
      */
@@ -38,3 +38,4 @@ public class OperationRetrait extends Operation implements Serializable {
                 + "    MONTANT: " + this.montantRetrait + " )";
     }
 }
+

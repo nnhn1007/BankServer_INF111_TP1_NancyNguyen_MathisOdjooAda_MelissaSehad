@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import com.atoudeft.banque.serveur.ConnexionBanque;
 
 public class CompteClient implements Serializable {
     private String numero;
     private String nip;
     private List<CompteBancaire> comptes;
+    private List<String> historiqueOperations;
 
     /**
      * Crée un compte-client avec un numéro et un nip.
@@ -21,6 +23,7 @@ public class CompteClient implements Serializable {
         this.numero = numero;
         this.nip = nip;
         comptes = new ArrayList<>();
+        this.historiqueOperations = new ArrayList<>();
     }
 
     /**
@@ -31,9 +34,6 @@ public class CompteClient implements Serializable {
      */
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
-    }
-    public String getNumero() {
-        return numero;
     }
 
     public String getNip() {
@@ -57,7 +57,6 @@ public class CompteClient implements Serializable {
     }
 
     /**
-     *
      * @param typeCompte
      * @return
      */
@@ -71,16 +70,29 @@ public class CompteClient implements Serializable {
     }
 
     /**
-     *
      * @param numDeCompte
      * @return
      */
     public CompteBancaire getCompte(String numDeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
-            if (compteBancaire.getNumero() == numero) {
+            if (compteBancaire.getNumero().equals(numDeCompte)) {
                 return compteBancaire;
             }
         }
         return null;
+    }
+
+    public List<String> getHistoriqueOperations() {
+        return historiqueOperations;
+    }
+
+    /**
+     * Fait par Melissa Sehad
+     * Methode qui returne le numero du compte-client
+     *
+     * @return le numero du compte-client
+     */
+    public String getNumero() {
+        return numero;
     }
 }

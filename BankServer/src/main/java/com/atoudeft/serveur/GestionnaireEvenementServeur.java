@@ -7,6 +7,7 @@ import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 
@@ -391,8 +392,25 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     } else {
                         cnx.envoyer("TRANSFER NO");
                     }
-
                     break;
+
+                case "HIST" :
+                    numCompteClient = cnx.getNumeroCompteClient();
+                    if (numCompteClient== null){
+                        cnx.envoyer("HIST NO");
+                        break;
+                    }
+
+                    banque = serveurBanque.getBanque();
+                    compteClient = banque.getCompte(numCompteClient);
+                    List<String> historique = compteClient.getHistoriqueOperations();
+                    String historiqueMessage = "HIST \n";
+                    for (String operation : historique){
+                        historiqueMessage += operation + "\n";
+                    }
+                    cnx.envoyer(historiqueMessage);
+                    break;
+
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
 
                 default: //Renvoyer le texte recu convertit en majuscules :
