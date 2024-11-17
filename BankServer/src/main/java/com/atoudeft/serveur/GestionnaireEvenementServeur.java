@@ -280,14 +280,14 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
-                    compteBancaire=compteClient.getCompte(numCompteClient);
+                    compteBancaire = compteClient.getCompte(numCompteClient);
                     ArrayList<Operation> historique = compteClient.getCompte(numCompteClient).afficherHistoriqueOperation();
                     StringBuilder historiqueMessage = new StringBuilder("HIST \n");
                     for (Operation operation : historique) {
                         historiqueMessage.append((operation.toString())).append("\n");
                     }
                     cnx.envoyer(historiqueMessage.toString());
-                     System.out.println(compteBancaire.afficherHistoriqueOperation());
+                    System.out.println(compteBancaire.afficherHistoriqueOperation());
                     break;
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :

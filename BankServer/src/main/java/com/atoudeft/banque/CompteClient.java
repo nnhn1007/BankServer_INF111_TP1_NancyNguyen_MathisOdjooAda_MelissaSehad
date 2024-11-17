@@ -43,8 +43,8 @@ public class CompteClient implements Serializable {
      * @return
      */
     public boolean getCompteDestinataire(String numDeCompte) {
-        for (CompteBancaire compteBancaire : comptes) {  //TODO À changer.
-            if ((numDeCompte.equals(getNumero()))) {
+        for (int i=0; i<comptes.size(); i++) {  //TODO À changer.
+            if ((numDeCompte.equals(getNumero()))){
                 return false;
             }
         }
