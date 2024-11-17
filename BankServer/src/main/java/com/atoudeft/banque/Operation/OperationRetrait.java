@@ -4,7 +4,7 @@ import com.atoudeft.banque.TypeOperation;
 import java.io.Serializable;
 
 /**
- * OperationRetrait représente les opérations de retrait bancaire
+ * La classe OperationRetrait représente les opérations de retrait bancaire
  * Elle est une sous-classe de la classe Operation et stocke les détails du retrait bancaire ;
  *        - sa date de transaction, le type de transaction, et le montant de transaction
  * @author Mathis Odjo'o Ada
