@@ -3,7 +3,7 @@ package com.atoudeft.banque.Operation;
 import com.atoudeft.banque.TypeOperation;
 
 /**
-* OperationFacture représente les operations de paiement de facture
+* La classe OperationFacture représente les operations de paiement de facture
  * Elle est une sous-classe de la classe Operation et stocke les détails du paiement de facture;
  *       - sa date de transaction, le type de transaction, et le montant de transaction
  * @author Mathis Odjo'o Ada
