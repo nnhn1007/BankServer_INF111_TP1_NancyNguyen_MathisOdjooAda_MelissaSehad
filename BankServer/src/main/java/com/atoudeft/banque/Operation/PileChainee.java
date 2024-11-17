@@ -6,6 +6,7 @@ import java.util.ArrayList;
 /**
  * La classe PileChainee est une classe qui represente une pile chainee d'operation banacaire
  * Elle permet d'empiler et de depiler les operations bancaire (LIFO)
+ * @author Melissa Sehad
  */
 public class PileChainee implements Serializable {
     private Noeud elementSommet;
