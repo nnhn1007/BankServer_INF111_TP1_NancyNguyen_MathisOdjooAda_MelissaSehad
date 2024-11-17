@@ -2,16 +2,13 @@ package com.atoudeft.serveur;
 
 import com.atoudeft.banque.*;
 import com.atoudeft.banque.Operation.Operation;
-import com.atoudeft.banque.Operation.OperationDepot;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -170,8 +167,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     } else {
                         cnx.envoyer("SELECT NO");
-                        break;
+
                     }
+                    break;
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":// Fait par Mathis Odjo'o Ada
                     argument = evenement.getArgument();   // Récupération des informations du client
@@ -188,7 +186,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("DEPOT NO");
                         break;
                     }
-                    if (banque.deposer(montant, numCompteClient)) {
+                    if (banque.deposer(montant, numCompteClient)){
                         cnx.envoyer("DEPOT OK");
                     } else {
                         cnx.envoyer("DEPOT NO");
@@ -222,7 +220,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 /************************      Q6.3 FACTURE      ******************************/
                 case "FACTURE": //Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument(); // Récupération des informations du client
-                    t = argument.split(" ", 3);
+                    t = argument.split(" ");
                     if (t.length < 3) { //Vérifie qu'il y a bien:  montant NUMFACT Description
                         cnx.envoyer("FACTURE NO");
                         break;
@@ -248,9 +246,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 /************************      Q6.4 TRANSFER      ******************************/
                 case "TRANSFER": // Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument();
-                    t = argument.split(" ", 3);
+                    t = argument.split(" ", 4);
                     if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant,cpt1,cpt2
-                        cnx.envoyer("TRANSFER NO");
+                        cnx.envoyer("TRANSFER NO1");
                         break;
                     }
                     //Déclaration des variables
@@ -259,9 +257,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     String compteDestinataire = t[2];
                     banque = serveurBanque.getBanque();
 
-                    if (!(banque.numeroEstValide(numCompteClient)) || !(banque.numeroEstValide(compteDestinataire))
+                    if ((banque.numeroEstValide(numCompteClient)) || (banque.numeroEstValide(compteDestinataire))
                             || numCompteClient == null || compteDestinataire == null) {
-                        cnx.envoyer("TRANSFER NO");
+                        cnx.envoyer("TRANSFER NO2");
                         break;
                     }
                     if (banque.transferer(montant, numCompteClient, compteDestinataire)) {
@@ -279,15 +277,23 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
-                    compteBancaire = compteClient.getCompte(numCompteClient);
-                    ArrayList<Operation> historique = compteClient.getCompte(numCompteClient).afficherHistoriqueOperation();
-                    StringBuilder historiqueMessage = new StringBuilder("HIST \n");
-                    for (Operation operation : historique) {
-                        historiqueMessage.append((operation.toString())).append("\n");
-                    }
-                    cnx.envoyer(historiqueMessage.toString());
-                    System.out.println(compteBancaire.afficherHistoriqueOperation());
+                    String compteActuel= cnx.getNumeroCompteActuel();
+                    if(compteActuel==null){
+                    cnx.envoyer("HIST NO");
                     break;
+                }
+                    compteBancaire = compteClient.getCompteBancaire(numCompteClient);
+                    if(compteBancaire!=null) {
+                        ArrayList<Operation> historique = compteBancaire.afficherHistoriqueOperation();
+                        System.out.println("TAILLE LMAO : "+historique.size());
+                        StringBuilder historiqueMessage = new StringBuilder("HIST \n");
+                        for (Operation operation : historique) {
+                            historiqueMessage.append((operation.toString())).append("\n");
+                        }
+                        cnx.envoyer(historiqueMessage.toString());
+                        System.out.println(compteBancaire.afficherHistoriqueOperation());
+                        break;
+                    }
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();

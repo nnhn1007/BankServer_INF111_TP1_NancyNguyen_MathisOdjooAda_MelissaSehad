@@ -68,8 +68,10 @@ public class CompteClient implements Serializable {
      * @param numDeCompte
      * @return
      */
-    public CompteBancaire getCompte(String numDeCompte) {
+    public CompteBancaire getCompteBancaire(String numDeCompte) {
+        System.out.println("Recherche du compte : " + numDeCompte); //TODO TEST À SUPPRIMER.
         for (CompteBancaire compteBancaire : comptes) {
+            System.out.println("Compte présent : " + compteBancaire.getNumero()); //TODO TEST À SUPPRIMER.
             if (compteBancaire.getNumero().equals(numDeCompte)) {
                 return compteBancaire;
             }
