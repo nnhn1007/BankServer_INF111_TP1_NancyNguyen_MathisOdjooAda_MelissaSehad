@@ -11,7 +11,6 @@ public class CompteClient implements Serializable {
 
     /**
      * Crée un compte-client avec un numéro et un nip.
-     *
      * @param numero le numéro du compte-client
      * @param nip    le nip
      */
@@ -23,7 +22,6 @@ public class CompteClient implements Serializable {
 
     /**
      * Ajoute un compte bancaire au compte-client.
-     *
      * @param compte le compte bancaire
      * @return true si l'ajout est réussi
      */
@@ -79,11 +77,9 @@ public class CompteClient implements Serializable {
         return null;
     }
 
-
     /**
      * Fait par Melissa Sehad
      * Methode qui returne le numero du compte-client
-     *
      * @return le numero du compte-client
      */
     public String getNumero() {

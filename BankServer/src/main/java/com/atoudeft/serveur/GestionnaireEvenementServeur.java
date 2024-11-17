@@ -138,7 +138,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     compteClient.ajouter(compteEpargne);
                     cnx.envoyer("EPARGNE OK");
                     break;
-
                 /************************      Q5.1 SELECT       ******************************/
                 case "SELECT": // Fait par Nancy Nguyen
                     CompteBancaire compteBancaire = null;   //Vérifier si le client est connecté
@@ -147,6 +146,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("SELECT NO"); //le client n'est pas connecté
                         break;
                     }
+
                     //Recupération de l'argument de la commande (chèque ou épargne)
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
@@ -161,6 +161,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             break;
                         }
                     }
+
                     if (compteBancaire != null) {
                         cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
                         cnx.envoyer("SELECT OK");
@@ -178,14 +179,17 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("DEPOT NO");
                         break;
                     }
+
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteActuel();
                     double montant = Double.parseDouble(t[0]);
+
                     //2. Vérifier si le client est connecté au serveur
                     if (numCompteClient == null) {
                         cnx.envoyer("DEPOT NO");
                         break;
                     }
+
                     if (banque.deposer(montant, numCompteClient)){
                         cnx.envoyer("DEPOT OK");
                     } else {
@@ -200,22 +204,23 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("RETRAIT NO");
                         break;
                     }
+
                     //Déclaration des variables
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteClient();
                     montant = Double.parseDouble(t[0]);
 
-                    //2. Vérifier si le client est connecté
+                    //Vérifier si le client est connecté
                     if (numCompteClient == null) {
                         cnx.envoyer("RETRAIT NO");
                         break;
                     }
+
                     if (banque.retirer(montant, numCompteClient)) {
                         cnx.envoyer("RETRAIT OK");
                     } else {
                         cnx.envoyer("RETRAIT NO");
                     }
-
                     break;
                 /************************      Q6.3 FACTURE      ******************************/
                 case "FACTURE": //Fait par Nancy Nguyen et Mathis Odjo'o Ada
@@ -225,6 +230,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("FACTURE NO");
                         break;
                     }
+
                     //Déclaration des variables
                     montant = Double.parseDouble(t[0]);
                     String numFact = t[1];
@@ -237,6 +243,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("FACTURE NO");
                         break;
                     }
+
                     if (banque.payerFacture(montant, numCompteClient, numFact, description)) {
                         cnx.envoyer("FACTURE OK");
                     } else {
@@ -251,6 +258,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("TRANSFER NO1");
                         break;
                     }
+
                     //Déclaration des variables
                     montant = Double.parseDouble(t[0]);
                     numCompteClient = t[1];
@@ -262,6 +270,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("TRANSFER NO2");
                         break;
                     }
+
                     if (banque.transferer(montant, numCompteClient, compteDestinataire)) {
                         cnx.envoyer("TRANSFER OK");
                     } else {
@@ -270,18 +279,23 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q7.7 HIST      ******************************/
                 case "HIST": //Fait Melissa Sehad et Mathis Odjo'o Ada
+                    //Récuperer le numero de compte du client, et verifier s'il est connecté
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("HIST NO");
                         break;
                     }
+
+                    //Accéder au compte-client et à son historique
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
                     String compteActuel= cnx.getNumeroCompteActuel();
                     if(compteActuel==null){
-                    cnx.envoyer("HIST NO");
-                    break;
-                }
+                        cnx.envoyer("HIST NO");
+                        break;
+                    }
+
+                    //Récupérer l'historique des opérations reliés au compte bancaire
                     compteBancaire = compteClient.getCompteBancaire(numCompteClient);
                     if(compteBancaire!=null) {
                         ArrayList<Operation> historique = compteBancaire.afficherHistoriqueOperation();
