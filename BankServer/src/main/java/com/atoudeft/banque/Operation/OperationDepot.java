@@ -4,7 +4,7 @@ import com.atoudeft.banque.TypeOperation;
 import java.io.Serializable;
 
 /**
- * OperationDepot represente une operation de depot bancaire
+ * La classe OperationDepot represente une operation de depot bancaire
  * Elle est une sous-classe de la classe Operation et stocke les détails du dépôt bancaire;
  *      - sa date de transaction, le type de transaction, et le montant de transaction
  * @author Mathis Odjo'o Ada
