@@ -4,7 +4,7 @@ import com.atoudeft.banque.TypeOperation;
 import java.io.Serializable;
 
 /**
- * La classe OperationTransfer est une classe qui représente une opération de transfert bancaire.
+ * OperationTransfer représente une opération de transfert bancaire.
  * Elle est une sous-classe de la classe Operation et stocke les détails du transfert bancaire;
  *      - sa date de transaction, le type de transaction, et le montant de transaction
  * @author Mathis Odjo'o Ada
@@ -46,11 +46,11 @@ public class OperationTransfer extends Operation implements Serializable {
     /**
      * Q7.3 - Fait par Nancy Nguyen et Melissa Sehad
      * Décrit l'opération de transfert, incluant la date, le type, et le montant de transfert
-     * @return chaîne de format: DATE: [date] TYPE: [type] MONTANT: [montant]
+     * @return chaîne de format: DATE: [date]    TYPE: [type]    MONTANT: [montant]
      */
     public String toString() {
         return    "DATE: " + getDate()
                 + "    TYPE: " + this.getType()
-                + "    MONTANT: " + this.montantTransfer + " )";
+                + "    MONTANT: " + this.montantTransfer;
     }
 }
