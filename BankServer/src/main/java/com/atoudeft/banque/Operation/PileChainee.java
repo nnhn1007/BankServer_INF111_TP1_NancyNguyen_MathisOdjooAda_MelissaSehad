@@ -43,7 +43,7 @@ public class PileChainee implements Serializable {
     }
 
     /**
-     * Fait par Melissa Sehad
+     * Fait par Melissa Sehad et Mathis Odjo'o Ada
      * Recupere l'historique des operations de l'utilisateur, et la retourne
      * @return liste contenant les operations du client
      *         liste vide si la pile est vide
