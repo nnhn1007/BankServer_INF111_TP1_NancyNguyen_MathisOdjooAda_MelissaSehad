@@ -1,11 +1,13 @@
 package com.atoudeft.banque.Operation;
 
 import com.atoudeft.banque.TypeOperation;
-
 import java.io.Serializable;
 
 /**
  * La classe OperationDepot est une classe qui represente une operation de depot bancaire
+ * Elle est une sous-classe de la classe Operation et stocke les détails du dépôt bancaire;
+ *      - sa date de transaction, le type de transaction, et le montant de transaction
+ * @author Mathis Odjo'o Ada
  */
 public class OperationDepot extends Operation implements Serializable {
     private final double montantDepot;
@@ -13,7 +15,6 @@ public class OperationDepot extends Operation implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Constructeur de l'operation de depot
-     *
      * @param montantDepot Le montant  de depot
      */
     public OperationDepot(double montantDepot) {
@@ -24,16 +25,19 @@ public class OperationDepot extends Operation implements Serializable {
     /**
      * Fait par Melissa Sehad
      * Methode qui retourne le montant du depot
-     *
      * @return le montant du depot
      */
     public double getMontantDepot() {
         return montantDepot;
     }
 
-    //Q7.3 - Fait par Nancy Nguyen
+    /**
+     * Q7.3 - Fait par Nancy Nguyen et Melissa Sehad
+     * Décrit l'opération de dépôt, incluant la date, le type, et le montant du dépôt
+     * @return chaîne de format: DATE: [date] TYPE: [type] MONTANT: [montant]
+     */
     public String toString() {
-        return " Montant de depot ( " + "DATE: " + getDate()
+        return    "DATE: " + getDate()
                 + "    TYPE: " + this.getType()
                 + "    MONTANT: " + this.montantDepot + " )";
     }
