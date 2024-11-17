@@ -87,98 +87,55 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
                 /******************* Q3.1 - CAS OÙ LE CLIENT A DÉJÀ UN COMPTE-CLIENT *******************/
-                // Fait par Nancy Nguyen
-                case "CONNECT":
-                    /*
-                     * Stratégie:
-                     *   1. Récuperer les informations du client : numéro de compte et le pin
-                     *   2. Vérifier s'il y a un autre client déjà connecté sur ce compte
-                     *   3. Vérifier si le nip est correct
-                     *       3.1. Regarder si le compte existe
-                     *       3.2. Regarder si le nip enregistré correspond au NIP entré par l'utilisateur
-                     *       3.3. Comparer les deux nip
-                     *   4. Inscrire le numéro du compte-client et son compte-chèque dans l'objet
-                     *      connexionBanque du client
-                     * */
-
-                    //Récupération des informations du client : Numéro de compte-client et nip
-                    argument = evenement.getArgument();
+                case "CONNECT":  // Fait par Nancy Nguyen
+                    argument = evenement.getArgument(); //Récupération des informations du client : Numéro de compte-client et nip
                     t = argument.split(":");
                     if (t.length < 2) { /* Si t < 2, il manque au moins une information, et on sort du switch */
                         cnx.envoyer("CONNECT NO");
                         break;
                     }
-
                     numCompteClient = t[0];  //Numéro de Compte-Client
                     nip = t[1];              //Nip envoyé par le client
                     banque = serveurBanque.getBanque();
-                    //Vérifier s'il y a un autre client déjà connecté sur ce compte
-                    if (banque.getCompte(numCompteClient) == null) {
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
+                    if (banque.getCompte(numCompteClient) == null || cnx.getNumeroCompteClient() != null) {
                         cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
                         break;
                     }
-                    if (cnx.getNumeroCompteClient() != null) {
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
-                        cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
-                        break;
-                    }
-
                     if ((banque.numeroEstValide(numCompteClient))) {
-                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
                         cnx.envoyer("CONNECT NO"); //Le client est déjà connecté
                     }
-
                     //Vérifier si le nip correspond au nip enregistré relié au compte-chèque
                     banque = serveurBanque.getBanque();
                     CompteClient compteClient2 = new CompteClient(numCompteClient, nip);
-
-                    String nipEnregistré = compteClient2.getNip();
-                    if (!nipEnregistré.equals(nip)) {
+                    String nipEnregistre = compteClient2.getNip();
+                    if (!nipEnregistre.equals(nip)) {
                         cnx.envoyer("CONNECT NO"); //Le nip enregistré est différent au nip entré
-                        System.out.println("Test NON4"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     //Inscrire le numéro du compte-client et son compte-chèque dans l'objet
                     cnx.setNumeroCompteClient(numCompteClient);
                     cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                     cnx.envoyer("CONNECT OK");
                     break;
-
                 /************************      Q4.2 ÉPARGNE       ******************************/
                 case "EPARGNE":
                     // Fait par Nancy Nguyen
-                    /* Stratégie:
-                     *  1. Recueillir les informations du client (FAIT)
-                     *  2. Vérifier si le client est connecté (FAIT)
-                     *  3. Vérifier si le client possède un compte-épargne
-                     *  4. Générer un numéro unique pour le compte-épargne
-                     *  5. Créer un compte-épargne
-                     */
-
-                    // 1.Récupération des information du clients
-                    numCompteClient = cnx.getNumeroCompteClient();
+                    numCompteClient = cnx.getNumeroCompteClient();   // Récupération des information du clients
                     banque = serveurBanque.getBanque();
-
                     //2. Vérifier si le client est connecté au serveur
                     if (numCompteClient == null) {
                         cnx.envoyer("EPARGNE NO");
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     //3.Vérifier si le client a déjà un compte-épargne
                     if (banque.getNumeroCompteParDefaut(numCompteClient) == null) {
                         cnx.envoyer("EPARGNE NO");
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     // Générer un numéro unique pour le compte-épargne
                     String numCompteEpargne = "";
-                    while (banque.getCompteClient(numCompteEpargne) != null) {
-                        numCompteEpargne = CompteBancaire.genereNouveauNumero(); //À vérifier
+                    while (banque.getCompteClient(numCompteEpargne) != null && banque.numeroEstValide(numCompteEpargne)) {
+                        numCompteEpargne = CompteBancaire.genereNouveauNumero();
                     }
                     CompteClient compteClient = banque.getCompte(numCompteClient);
                     CompteEpargne compteEpargne = (new CompteEpargne(numCompteEpargne, TypeCompte.EPARGNE, TAUX_INTERET));
@@ -189,28 +146,16 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 /************************      Q5.1 SELECT       ******************************/
                 case "SELECT":
                     // Fait par Nancy Nguyen
-                    /* Stratégie:
-                     *  1. Vérifier si le client est connecté (OK)
-                     *  2. Récupérer l'argument de la commande (chèque ou épargne) (OK)
-                     *  3. Demander à la banque de donner le numéro de banque du client
-                     *     et Stocker le numéro dans l'objet ConnexionBanque du client
-                     *      opération réussie => SELECT OK
-                     *      opération non réussie => SELECT NO
-                     */
-                    //1. Vérifier si le client est connecté
-                    CompteBancaire compteBancaire = null;
+                    CompteBancaire compteBancaire = null;   // Vérifier si le client est connecté
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("SELECT NO"); // le client n'est pas connecté
                         break;
                     }
-
                     //3. Recupération de l'argument de la commande (chèque ou épargne)
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
-
-
                     switch (argument) {
                         case "CHEQUE": {
                             compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
@@ -230,30 +175,22 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("SELECT NO"); // le client n'est pas connecté
                         break;
                     }
-
-
                     /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
-                    // 1. Récupération des informations du client (Comme dans le case "NOUVEAU")
-                    argument = evenement.getArgument();
+                    argument = evenement.getArgument();   // Récupération des informations du client
                     t = argument.split(" ");
-                    if (t.length < 1) { // Si t == 1, il manque une information, et on sort du switch
+                    if (t.length < 1) { // Si t < 1, il manque une information, et on sort du switch
                         cnx.envoyer("DEPOT NO");
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteActuel();
                     double montant = Double.parseDouble(t[0]);
-
                     //2. Vérifier si le client est connecté au serveur
                     if (numCompteClient == null) {
                         cnx.envoyer("DEPOT NO");
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST Fonctionne et tester
                         break;
                     }
-                    //3. Effectuer le dépôt - À tester
-
                     if (banque.deposer(montant, numCompteClient)) {
                         cnx.envoyer("DEPOT OK");
                     } else {
@@ -262,21 +199,12 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.2 RETRAIT      ******************************/
                 case "RETRAIT":
-                    /* Fait par Nancy Nguyen
-                     * Stratégie:
-                     *  1. Récupérer les informations du client
-                     *  2. Vérifier si le client est connecté au serveur
-                     *  3. Effectuer le retait
-                     */
-                    //1. Récupération des informations du client
-                    argument = evenement.getArgument();
+                    argument = evenement.getArgument();  // Récupération des informations du client
                     t = argument.split(" ");
                     if (t.length < 1) { //Vérifie qu'il y a bien un montant
                         cnx.envoyer("RETRAIT NO"); //Il n'y a pas de montant à retirer
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     //Déclaration des variables
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteClient();
@@ -285,11 +213,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     //2. Vérifier si le client est connecté
                     if (numCompteClient == null) {
                         cnx.envoyer("RETRAIT NO");
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
                         break;
                     }
-                    System.out.println("TEST ACCOUNT : " + numCompteClient); //TODO RETIRER
-                    //Retirer le montant demandé
                     if (banque.retirer(montant, numCompteClient)) {
                         cnx.envoyer("RETRAIT OK");
                     } else {
@@ -299,100 +224,72 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /************************      Q6.3 FACTURE      ******************************/
                 case "FACTURE":
-                    /* Fait par Nancy Nguyen
-                     * Stratégie:
-                     *  1. Récupérer les informations du client
-                     *  2. Vérifier si le client est connecté au serveur
-                     *  3. Payer la facture
-                     */
-
-                    //1. Récupération des informations du client
-                    argument = evenement.getArgument();
+                    argument = evenement.getArgument(); // Récupération des informations du client
                     t = argument.split(" ", 3);
                     if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant NUMFACT Description
                         cnx.envoyer("FACTURE NO");
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     //Déclaration des variables
                     montant = Double.parseDouble(t[0]);
                     String numFact = t[1];
                     String description = t[2];
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteClient();
-
                     //2. Vérifier si le client est connecté
                     if (numCompteClient == null || numFact == null || description == null) {
                         cnx.envoyer("FACTURE NO");
                         break;
                     }
-
-                    //Paiement de la facture
                     if (banque.payerFacture(montant, numCompteClient, numFact, description)) {
                         cnx.envoyer("FACTURE OK");
                     } else {
                         cnx.envoyer("FACTURE NO");
                     }
-
                     break;
                 /************************      Q6.4 TRANSFER      ******************************/
                 case "TRANSFER":
-                    /* Fait par Nancy Nguyen
-                    // Stratégie:
-                    // Récupérer les informations du client
-                    // Vérifier si le client est connecté au serveur
-                    // Effectuer le transfert
-                    */
-
-                    //1. Récupération des informations du client
+                    // Fait par Nancy Nguyen
                     argument = evenement.getArgument();
                     t = argument.split(" ", 3);
                     if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant cpt1 cpt2
                         cnx.envoyer("TRANSFER NO");
-                        System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
-                    //Déclaration des variables
-                    montant = Double.parseDouble(t[0]);
+                    montant = Double.parseDouble(t[0]);  //Déclaration des variables
                     numCompteClient = t[1];
                     String compteDestinataire = t[2];
                     banque = serveurBanque.getBanque();
                     if (!(banque.numeroEstValide(numCompteClient)) || !(banque.numeroEstValide(compteDestinataire))
                             || numCompteClient == null || compteDestinataire == null) {
                         cnx.envoyer("TRANSFER NO");
-                        System.out.println("Test NON5"); //TODO ENLEVER LE TEST
                         break;
                     }
-
-                    // Effectuer le transfert
                     if (banque.transferer(montant, numCompteClient, compteDestinataire)) {
                         cnx.envoyer("TRANSFER OK");
                     } else {
                         cnx.envoyer("TRANSFER NO");
                     }
                     break;
-
+                /************************      Q7.7 HIST      ******************************/
                 case "HIST":
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("HIST NO");
                         break;
                     }
-
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
+                    compteBancaire=compteClient.getCompte(numCompteClient);
                     ArrayList<Operation> historique = compteClient.getCompte(numCompteClient).afficherHistoriqueOperation();
                     StringBuilder historiqueMessage = new StringBuilder("HIST \n");
                     for (Operation operation : historique) {
                         historiqueMessage.append((operation.toString())).append("\n");
                     }
                     cnx.envoyer(historiqueMessage.toString());
-                    // System.out.println(compteBancaire.consulterHistorique());
+                     System.out.println(compteBancaire.afficherHistoriqueOperation());
                     break;
-
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
-
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();
                     cnx.envoyer(msg);
