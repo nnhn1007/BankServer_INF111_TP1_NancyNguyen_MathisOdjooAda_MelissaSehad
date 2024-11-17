@@ -1,6 +1,8 @@
 package com.atoudeft.serveur;
 
 import com.atoudeft.banque.*;
+import com.atoudeft.banque.Operation.Operation;
+import com.atoudeft.banque.Operation.OperationDepot;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
@@ -8,6 +10,7 @@ import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -199,7 +202,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("SELECT NO"); // le client n'est pas connecté
-                        System.out.println("INNIT?");
                         break;
                     }
 
@@ -224,14 +226,13 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
                         cnx.envoyer("SELECT OK"); // le client n'est pas connecté
                         break;
-                    }
-                    else{
+                    } else {
                         cnx.envoyer("SELECT NO"); // le client n'est pas connecté
                         break;
                     }
 
 
-                /************************      Q6.1 DEPOT      ******************************/
+                    /************************      Q6.1 DEPOT      ******************************/
                 case "DEPOT":
                     // 1. Récupération des informations du client (Comme dans le case "NOUVEAU")
                     argument = evenement.getArgument();
@@ -242,7 +243,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
                     banque = serveurBanque.getBanque();
-                    numCompteClient = cnx.getNumeroCompteClient();
+                    numCompteClient = cnx.getNumeroCompteActuel();
                     double montant = Double.parseDouble(t[0]);
 
                     //2. Vérifier si le client est connecté au serveur
@@ -322,21 +323,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     numCompteClient = cnx.getNumeroCompteClient();
 
                     //2. Vérifier si le client est connecté
-                    if (numCompteClient == null) {
+                    if (numCompteClient == null || numFact == null || description == null) {
                         cnx.envoyer("FACTURE NO");
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
-                        break;
-                    }
-                    //3 Vérifier si numFact contient un numéro
-                    if (numFact == null) {
-                        cnx.envoyer("FACTURE NO");
-                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
-                        break;
-                    }
-                    //4 Vérifier si la facture possède une description
-                    if (description == null) {
-                        cnx.envoyer("FACTURE NO");
-                        System.out.println("Test NON4"); //TODO ENLEVER LE TEST
                         break;
                     }
 
@@ -351,11 +339,11 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 /************************      Q6.4 TRANSFER      ******************************/
                 case "TRANSFER":
                     /* Fait par Nancy Nguyen
-                     * Stratégie:
-                     *  1. Récupérer les informations du client
-                     *  2. Vérifier si le client est connecté au serveur
-                     *  3. Effectuer le transfert
-                     */
+                    // Stratégie:
+                    // Récupérer les informations du client
+                    // Vérifier si le client est connecté au serveur
+                    // Effectuer le transfert
+                    */
 
                     //1. Récupération des informations du client
                     argument = evenement.getArgument();
@@ -365,50 +353,42 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         System.out.println("Test NON1"); //TODO ENLEVER LE TEST
                         break;
                     }
-
                     //Déclaration des variables
                     montant = Double.parseDouble(t[0]);
                     numCompteClient = t[1];
-                    String compteDestinaire = t[2];
+                    String compteDestinataire = t[2];
                     banque = serveurBanque.getBanque();
-
-                    //2. Vérifier si le client est connecté
-                    if (cnx.getNumeroCompteClient() == null) {
+                    if (!(banque.numeroEstValide(numCompteClient)) || !(banque.numeroEstValide(compteDestinataire))
+                            || numCompteClient == null || compteDestinataire == null) {
                         cnx.envoyer("TRANSFER NO");
-                        System.out.println("Test NON2"); //TODO ENLEVER LE TEST
+                        System.out.println("Test NON5"); //TODO ENLEVER LE TEST
                         break;
                     }
 
-                    if(banque.numeroEstValide(numCompteClient) ||
-                            banque.numeroEstValide(compteDestinaire)){
-                        cnx.envoyer("TRANSFER NO");
-                        System.out.println("Test NON3"); //TODO ENLEVER LE TEST
-                        break;
-                    }
-
-                    //3. Effectuer le transfert
-                    if (banque.transferer(montant, numCompteClient, compteDestinaire)) {
+                    // Effectuer le transfert
+                    if (banque.transferer(montant, numCompteClient, compteDestinataire)) {
                         cnx.envoyer("TRANSFER OK");
                     } else {
                         cnx.envoyer("TRANSFER NO");
                     }
                     break;
 
-                case "HIST" :
+                case "HIST":
                     numCompteClient = cnx.getNumeroCompteClient();
-                    if (numCompteClient== null){
+                    if (numCompteClient == null) {
                         cnx.envoyer("HIST NO");
                         break;
                     }
 
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
-                    List<String> historique = compteClient.getHistoriqueOperations();
-                    String historiqueMessage = "HIST \n";
-                    for (String operation : historique){
-                        historiqueMessage += operation + "\n";
+                    ArrayList<Operation> historique = compteClient.getCompte(numCompteClient).afficherHistoriqueOperation();
+                    StringBuilder historiqueMessage = new StringBuilder("HIST \n");
+                    for (Operation operation : historique) {
+                        historiqueMessage.append((operation.toString())).append("\n");
                     }
-                    cnx.envoyer(historiqueMessage);
+                    cnx.envoyer(historiqueMessage.toString());
+                    // System.out.println(compteBancaire.consulterHistorique());
                     break;
 
                 /******************* TRAITEMENT PAR DÉFAUT *******************/

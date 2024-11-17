@@ -63,10 +63,7 @@ public class Banque implements Serializable {
      */
     public boolean appartientA(String numeroCompteBancaire, String numeroCompteClient) {
         CompteClient compteClient = getCompteClient(numeroCompteClient);
-        if (compteClient.getCompteDestinataire(numeroCompteBancaire)) {
-            return true;
-        }
-        return false;
+        return (compteClient.getCompte(numeroCompteBancaire)!= null);
     }
 
     /**
@@ -81,12 +78,13 @@ public class Banque implements Serializable {
         CompteClient compteClient = getCompte(numeroCompte);
 
         if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
-            if (compteBancaire != null) {
+            CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
+            if (compteBancaire != null && compteBancaire.crediter(montant) &&
+                    appartientA(compteBancaire.getNumero(),compteClient.getNumero())) {
                 System.out.println("Solde du début :" + compteBancaire.getSolde());
-                compteBancaire.crediter(montant);
                 System.out.println(compteBancaire.getSolde());
                 OperationDepot operationDepot = new OperationDepot(montant);
+                compteBancaire.ajouterOperation(operationDepot);
                 return true;
             }
         }
@@ -103,11 +101,13 @@ public class Banque implements Serializable {
     public boolean retirer(double montant, String numeroCompte) {
         CompteClient compteClient = getCompte(numeroCompte);
         if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);//TODO À changer
+            CompteBancaire compteBancaire= getCompteBancaire(numeroCompte);
             if (compteBancaire != null && compteBancaire.debiter(montant)) {
                 System.out.println("Solde du début (RETIRER) :" + compteBancaire.getSolde()); //TODO à enlever
                 System.out.println(compteBancaire.getSolde());
                 OperationRetrait operationRetrait = new OperationRetrait(montant);
+                compteBancaire.ajouterOperation(operationRetrait);
+
                 return true;
             }
         }
@@ -143,6 +143,7 @@ public class Banque implements Serializable {
                 System.out.println("Solde du début (RETIRER) :" + compteBancaire.getSolde()); //TODO à enlever
                 System.out.println(compteBancaire.getSolde());
                 OperationFacture operationFacture = new OperationFacture(montant, numeroFacture, description);
+                compteBancaire.ajouterOperation(operationFacture);
                 return true;
             }
         }
@@ -206,7 +207,6 @@ public class Banque implements Serializable {
     public boolean numeroEstValide(String numDeCompte) {
         for (CompteClient compteClient : comptes) {
             if (!(compteClient.getCompteDestinataire(numDeCompte))) {
-                System.out.println("Test NONINC"); //TODO ENLEVER LE TEST
                 return false;
             }
         }
@@ -228,6 +228,7 @@ public class Banque implements Serializable {
         CompteBancaire compteBancaire;
 
         for (CompteClient compteClient : comptes) {
+            System.out.println("ALLOTEST : "+compteClient.getCompte(numCompteBancaire));
             if (compteClient.getCompte(numCompteBancaire) != null) {
                 compteBancaire = compteClient.getCompte(numCompteBancaire);
                 return compteBancaire;

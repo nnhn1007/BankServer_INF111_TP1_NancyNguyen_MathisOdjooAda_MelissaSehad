@@ -3,16 +3,11 @@ package com.atoudeft.banque;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import com.atoudeft.banque.Operation.Operation;
-import com.atoudeft.banque.serveur.ConnexionBanque;
 
 public class CompteClient implements Serializable {
     private String numero;
     private String nip;
     private List<CompteBancaire> comptes;
-    private List<String> historiqueOperations;
 
     /**
      * Crée un compte-client avec un numéro et un nip.
@@ -24,7 +19,6 @@ public class CompteClient implements Serializable {
         this.numero = numero;
         this.nip = nip;
         comptes = new ArrayList<>();
-        this.historiqueOperations = new ArrayList<>();
     }
 
     /**
@@ -82,6 +76,7 @@ public class CompteClient implements Serializable {
         }
         return null;
     }
+
 
     /**
      * Fait par Melissa Sehad
