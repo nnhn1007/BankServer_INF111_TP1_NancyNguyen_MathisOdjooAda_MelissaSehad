@@ -3,7 +3,6 @@ package com.atoudeft.banque.serveur;
 import com.atoudeft.banque.CompteBancaire;
 import com.atoudeft.commun.net.Connexion;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.net.Socket;
 
 public class ConnexionBanque extends Connexion {
@@ -14,7 +13,6 @@ public class ConnexionBanque extends Connexion {
     /**
      * Construit une connexion sur un socket, initialisant les flux de caractères utilisés par le socket et le moment
      * de la dernière opération effectuée par client utilisant cette connexion.
-     *
      * @param s Socket Le socket sur lequel la connexion est créée
      */
     public ConnexionBanque(Socket s) {
@@ -24,8 +22,7 @@ public class ConnexionBanque extends Connexion {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Indique si le client utilisant cette connexion est inactif pendant une durée au moins égale à delai en millisecondes.
-     *
+     * Indique si le client utilisant cette connexion est inactif pendant un délai d'au moins 'X' millisecondes
      * @param delai le délai en millisecondes
      * @return true la durée d'inactivité est supérieure à delai
      */
@@ -36,7 +33,6 @@ public class ConnexionBanque extends Connexion {
 
     /**
      * Retourne le moment en millisecondes de la dernière opération du client utilisant cette connexion.
-     *
      * @return le moment en millisecondes de la dernière opération du client
      */
     public long getTempsDerniereOperation() {
@@ -45,7 +41,6 @@ public class ConnexionBanque extends Connexion {
 
     /**
      * Enregistre le moment de la dernière opération du client utilisant cette connexion.
-     *
      * @param tempsDerniereOperation le moment en millisecondes de la dernière opération du client
      */
     public void setTempsDerniereOperation(long tempsDerniereOperation) {
@@ -54,7 +49,6 @@ public class ConnexionBanque extends Connexion {
 
     /**
      * Récupère le numéro du compte-client du client utilisant cette connexion.
-     *
      * @return le numéro du compte-client du client
      */
     public String getNumeroCompteClient() {
@@ -63,7 +57,6 @@ public class ConnexionBanque extends Connexion {
 
     /**
      * Modifie le numéro du compte-client du client utilisant cette connexion.
-     *
      * @param numeroCompteClient le numéro du compte-client du client
      */
     public void setNumeroCompteClient(String numeroCompteClient) {
