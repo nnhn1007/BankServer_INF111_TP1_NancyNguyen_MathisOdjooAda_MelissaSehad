@@ -12,7 +12,6 @@ public class Noeud implements Serializable {
     /**
      * Fait par Melissa Sehad
      * Constructeur de la classe Noeud
-     *
      * @param operation    L'operation a stocker dans le noeud
      */
     public Noeud(Operation operation) {

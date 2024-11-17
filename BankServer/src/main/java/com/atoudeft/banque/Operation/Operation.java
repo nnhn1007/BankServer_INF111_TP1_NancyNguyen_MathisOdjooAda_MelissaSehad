@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Operation représente les différents opérations bancaires possibles; OperationDepot, OperationFacture,
+ * La classe Operation représente les différents opérations bancaires possibles; OperationDepot, OperationFacture,
  * OperationRetrait et OperationTranfer, qui sont tous des sous-classes d'Operation.
  * @author Mathis Odjo'o Ada
  */
