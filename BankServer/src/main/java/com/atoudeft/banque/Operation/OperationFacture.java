@@ -3,7 +3,7 @@ package com.atoudeft.banque.Operation;
 import com.atoudeft.banque.TypeOperation;
 
 /**
- * La classe OperationFacture est une classe qui represente les operations de paiement de facture
+* OperationFacture représente les operations de paiement de facture
  * Elle est une sous-classe de la classe Operation et stocke les détails du paiement de facture;
  *       - sa date de transaction, le type de transaction, et le montant de transaction
  * @author Mathis Odjo'o Ada
@@ -56,12 +56,12 @@ public class OperationFacture extends Operation {
 
     /**
      * Q7.3 - Fait par Nancy Nguyen et Melissa Sehad
-     * Décrit l'opération de paiement de facture, incluant la date, le type, et le montant du paiement de facture
-     * @return chaîne de format: DATE: [date] TYPE: [type] MONTANT: [montant]
+     * Décrit les détails du paiement de facture: la date, le type, et le montant
+     * @return chaîne de format: DATE: [date]    TYPE: [type]    MONTANT: [montant]
      */
     public String toString() {
         return    "DATE: " + getDate()
                 + "    TYPE: " + this.getType()
-                + "    MONTANT: " + this.montantFacture + " )";
+                + "    MONTANT: " + this.montantFacture;
     }
 }
