@@ -18,7 +18,7 @@ public class OperationDepot extends Operation implements Serializable {
      * @param montantDepot Le montant  de depot
      */
     public OperationDepot(double montantDepot) {
-        super(TypeOperation.DEPOT); // Je pense pcq on veut pas de TypeOperation dans le constructeur.
+        super(TypeOperation.DEPOT);
         this.montantDepot = montantDepot;
     }
 
