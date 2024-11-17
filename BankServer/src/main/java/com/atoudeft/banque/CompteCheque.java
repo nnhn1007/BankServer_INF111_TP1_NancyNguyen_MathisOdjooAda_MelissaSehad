@@ -9,7 +9,6 @@ public class CompteCheque extends CompteBancaire {
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un compte chèque.
-     *
      * @param numero numéro du compte
      * @param type   type du compte
      */

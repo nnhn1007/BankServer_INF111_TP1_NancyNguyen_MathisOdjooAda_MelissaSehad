@@ -88,9 +88,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
                 /******************* Q3.1 - CAS OÙ LE CLIENT A DÉJÀ UN COMPTE-CLIENT *******************/
                 case "CONNECT":  // Fait par Nancy Nguyen
-                    argument = evenement.getArgument(); //Récupération des informations du client : Numéro de compte-client et nip
+                    argument = evenement.getArgument(); //Récupérer des informations du client:numCompteClient et nip
                     t = argument.split(":");
-                    if (t.length < 2) { /* Si t < 2, il manque au moins une information, et on sort du switch */
+                    if (t.length < 2) { // Si t < 2, il manque au moins une information, et on sort du switch
                         cnx.envoyer("CONNECT NO");
                         break;
                     }
@@ -118,21 +118,20 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     cnx.envoyer("CONNECT OK");
                     break;
                 /************************      Q4.2 ÉPARGNE       ******************************/
-                case "EPARGNE":
-                    // Fait par Nancy Nguyen
-                    numCompteClient = cnx.getNumeroCompteClient();   // Récupération des information du clients
+                case "EPARGNE": // Fait par Nancy Nguyen
+                    numCompteClient = cnx.getNumeroCompteClient();  //Récupération des information du clients
                     banque = serveurBanque.getBanque();
                     //2. Vérifier si le client est connecté au serveur
                     if (numCompteClient == null) {
                         cnx.envoyer("EPARGNE NO");
                         break;
                     }
-                    //3.Vérifier si le client a déjà un compte-épargne
+                    //Vérifier si le client a déjà un compte-épargne
                     if (banque.getNumeroCompteParDefaut(numCompteClient) == null) {
                         cnx.envoyer("EPARGNE NO");
                         break;
                     }
-                    // Générer un numéro unique pour le compte-épargne
+                    //Générer un numéro unique pour le compte-épargne
                     String numCompteEpargne = "";
                     while (banque.getCompteClient(numCompteEpargne) != null && banque.numeroEstValide(numCompteEpargne)) {
                         numCompteEpargne = CompteBancaire.genereNouveauNumero();
@@ -144,15 +143,14 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
 
                 /************************      Q5.1 SELECT       ******************************/
-                case "SELECT":
-                    // Fait par Nancy Nguyen
-                    CompteBancaire compteBancaire = null;   // Vérifier si le client est connecté
+                case "SELECT": // Fait par Nancy Nguyen
+                    CompteBancaire compteBancaire = null;   //Vérifier si le client est connecté
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
-                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        cnx.envoyer("SELECT NO"); //le client n'est pas connecté
                         break;
                     }
-                    //3. Recupération de l'argument de la commande (chèque ou épargne)
+                    //Recupération de l'argument de la commande (chèque ou épargne)
                     argument = evenement.getArgument();
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompte(numCompteClient);
@@ -161,7 +159,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
                             break;
                         }
-
                         case "EPARGNE": {
                             compteBancaire = compteClient.getCompteBancaire(TypeCompte.EPARGNE);
                             break;
@@ -169,14 +166,14 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     if (compteBancaire != null) {
                         cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
-                        cnx.envoyer("SELECT OK"); // le client n'est pas connecté
+                        cnx.envoyer("SELECT OK");
                         break;
                     } else {
-                        cnx.envoyer("SELECT NO"); // le client n'est pas connecté
+                        cnx.envoyer("SELECT NO");
                         break;
                     }
                     /************************      Q6.1 DEPOT      ******************************/
-                case "DEPOT":
+                case "DEPOT":// Fait par Mathis Odjo'o Ada
                     argument = evenement.getArgument();   // Récupération des informations du client
                     t = argument.split(" ");
                     if (t.length < 1) { // Si t < 1, il manque une information, et on sort du switch
@@ -198,11 +195,11 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
                 /************************      Q6.2 RETRAIT      ******************************/
-                case "RETRAIT":
+                case "RETRAIT": // Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument();  // Récupération des informations du client
                     t = argument.split(" ");
                     if (t.length < 1) { //Vérifie qu'il y a bien un montant
-                        cnx.envoyer("RETRAIT NO"); //Il n'y a pas de montant à retirer
+                        cnx.envoyer("RETRAIT NO");
                         break;
                     }
                     //Déclaration des variables
@@ -223,10 +220,10 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     break;
                 /************************      Q6.3 FACTURE      ******************************/
-                case "FACTURE":
+                case "FACTURE": //Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument(); // Récupération des informations du client
                     t = argument.split(" ", 3);
-                    if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant NUMFACT Description
+                    if (t.length < 3) { //Vérifie qu'il y a bien:  montant NUMFACT Description
                         cnx.envoyer("FACTURE NO");
                         break;
                     }
@@ -236,7 +233,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     String description = t[2];
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteClient();
-                    //2. Vérifier si le client est connecté
+
+                    //Vérifier si le client est connecté
                     if (numCompteClient == null || numFact == null || description == null) {
                         cnx.envoyer("FACTURE NO");
                         break;
@@ -248,18 +246,19 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
                 /************************      Q6.4 TRANSFER      ******************************/
-                case "TRANSFER":
-                    // Fait par Nancy Nguyen
+                case "TRANSFER": // Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument();
                     t = argument.split(" ", 3);
-                    if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant cpt1 cpt2
+                    if (t.length < 3) { //Vérifie qu'il y a bien ces éléments; montant,cpt1,cpt2
                         cnx.envoyer("TRANSFER NO");
                         break;
                     }
-                    montant = Double.parseDouble(t[0]);  //Déclaration des variables
+                    //Déclaration des variables
+                    montant = Double.parseDouble(t[0]);
                     numCompteClient = t[1];
                     String compteDestinataire = t[2];
                     banque = serveurBanque.getBanque();
+
                     if (!(banque.numeroEstValide(numCompteClient)) || !(banque.numeroEstValide(compteDestinataire))
                             || numCompteClient == null || compteDestinataire == null) {
                         cnx.envoyer("TRANSFER NO");
@@ -272,7 +271,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
                 /************************      Q7.7 HIST      ******************************/
-                case "HIST":
+                case "HIST": //Fait Melissa Sehad et Mathis Odjo'o Ada
                     numCompteClient = cnx.getNumeroCompteClient();
                     if (numCompteClient == null) {
                         cnx.envoyer("HIST NO");
