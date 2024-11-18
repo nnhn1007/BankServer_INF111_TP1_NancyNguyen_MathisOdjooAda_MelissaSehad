@@ -258,7 +258,7 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Crée un nouveua compte-client, et ajoute un compte bancaire associé à celui-ci
+     * Crée un nouveua compte-client,et ajoute un compte bancaire associé à celui-ci
      * @param numCompteClient numéro du compte-client
      * @param nip             nip du compte client
      */
