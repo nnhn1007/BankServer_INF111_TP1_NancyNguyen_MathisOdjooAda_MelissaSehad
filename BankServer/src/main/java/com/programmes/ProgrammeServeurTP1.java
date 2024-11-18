@@ -41,26 +41,6 @@ public class ProgrammeServeurTP1 {
             saisie = clavier.nextLine();
         }
         serveur.arreter();
-    /*
-        //Test sur les Comptes Épargnes
-        CompteEpargne compteEpargne= new CompteEpargne("ABD342W", TypeCompte.EPARGNE,0.05);
-        compteEpargne.crediter(500);
-        System.out.println("Solde après l'avoir crédité :"+compteEpargne.getSolde());
-
-        compteEpargne.debiter(100);
-        System.out.println("Solde après l'avoir débité :"+compteEpargne.getSolde());
-
-        compteEpargne.ajouterInterets();
-        System.out.println("Solde après avoir ajouté les intérets :"+compteEpargne.getSolde());
-    */
-
-    /*
-        //Test sur les opérations
-        OperationDepot operationDepotDepot= new OperationDepot(50.0);
-        OperationRetrait operationRetrait = new OperationRetrait(50.0);
-        OperationFacture operationFacture= new OperationFacture(50.0,"1234","Facture");
-        OperationTransfer operationTransfer= new OperationTransfer(50.0,"ASD6BW1");
-    */
     }
 
 

@@ -163,7 +163,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
 
                     if (compteBancaire != null) {
-                        cnx.setNumeroCompteActuel(numCompteClient); // Si le compte bancaire n'existe pas !
+                        cnx.setNumeroCompteActuel(compteBancaire.getNumero()); // Si le compte bancaire n'existe pas !
                         cnx.envoyer("SELECT OK");
                         break;
                     } else {
@@ -182,6 +182,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteActuel();
+                    System.out.println("CPT"+numCompteClient);
                     double montant = Double.parseDouble(t[0]);
 
                     //2. Vérifier si le client est connecté au serveur
@@ -288,18 +289,12 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     //Accéder au compte-client et à son historique
                     banque = serveurBanque.getBanque();
-                    compteClient = banque.getCompte(numCompteClient);
+                    compteClient = banque.getCompteClient(numCompteClient);
                     String compteActuel= cnx.getNumeroCompteActuel();
-                    if(compteActuel==null){
-                        cnx.envoyer("HIST NO");
-                        break;
-                    }
-
                     //Récupérer l'historique des opérations reliés au compte bancaire
-                    compteBancaire = compteClient.getCompteBancaire(numCompteClient);
+                    compteBancaire = compteClient.getCompteBancaire(compteActuel);
                     if(compteBancaire!=null) {
                         ArrayList<Operation> historique = compteBancaire.afficherHistoriqueOperation();
-                        System.out.println("TAILLE LMAO : "+historique.size());
                         StringBuilder historiqueMessage = new StringBuilder("HIST \n");
                         for (Operation operation : historique) {
                             historiqueMessage.append((operation.toString())).append("\n");

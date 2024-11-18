@@ -5,6 +5,7 @@ import com.atoudeft.banque.Operation.OperationFacture;
 import com.atoudeft.banque.Operation.OperationRetrait;
 import com.atoudeft.banque.Operation.OperationTransfer;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Banque implements Serializable {
 
     /**
      * Constructeur Banque, avec le paramètre nom
+     *
      * @param nom nom de la banque
      */
     public Banque(String nom) {
@@ -25,9 +27,10 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Recherche un compte-client à partir de son numéro.
+     *
      * @param numeroCompteClient le numéro du compte-client
      * @return le compte-client s'il a été trouvé,
-     *         Sinon, retourne null.
+     * Sinon, retourne null.
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
         CompteClient cpt = new CompteClient(numeroCompteClient, "");
@@ -40,6 +43,7 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
+     *
      * @param numDeCompteClient numéro du compte-client
      * @return le compte-client s'il existe, null sinon.
      */
@@ -58,6 +62,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Vérifier qu'un compte-bancaire appartient bien au compte-client spécifié.
+     *
      * @param numeroCompteBancaire numéro du compte-bancaire
      * @param numeroCompteClient   numéro du compte-client
      * @return true, si le compte-bancaire appartient au compte-client, false sinon.
@@ -70,42 +75,37 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un dépot d'argent dans un compte-bancaire
+     *
      * @param montant      montant à déposer
      * @param numeroCompte numéro du compte
      * @return true si le dépot s'est effectué correctement, false sinon.
      */
     public boolean deposer(double montant, String numeroCompte) {
-
-        CompteClient compteClient = getCompte(numeroCompte);
-    /*  Le code ci-dessous est celui que nous souhaitions implémenter. Par contre, en raison
-        d'une ligne spécifique, il ne fonctionne pas comme prévu.
-
-        if (compteClient != null) {
-            CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
-            if (compteBancaire != null && compteBancaire.crediter(montant) &&
-                    appartientA(compteBancaire.getNumero(),compteClient.getNumero())) {
-                System.out.println("Solde du début :" + compteBancaire.getSolde());
-                System.out.println(compteBancaire.getSolde());
-                OperationDepot operationDepot = new OperationDepot(montant);
-                compteBancaire.ajouterOperation(operationDepot);
-                return true;
-            }
-    */
-
-        if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
-            if (compteBancaire != null && compteBancaire.crediter(montant)) {
-                OperationDepot operationDepot = new OperationDepot(montant);
-                compteBancaire.ajouterOperation(operationDepot);
-                return true;
-            }
+        CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
+        if (compteBancaire != null && compteBancaire.crediter(montant)) {
+            System.out.println(compteBancaire.getSolde());
+            OperationDepot operationDepot = new OperationDepot(montant);
+            compteBancaire.ajouterOperation(operationDepot);
+            return true;
         }
         return false;
+    }
+
+    public CompteBancaire getCompteBancaire(String numeroCompte) {
+        CompteBancaire compteBancaire;
+        for (CompteClient compteClient : comptes) {
+            if (compteClient.getCompteBancaire(numeroCompte) != null) {
+                compteBancaire = compteClient.getCompteBancaire(numeroCompte);
+                return compteBancaire;
+            }
+        }
+        return null;
     }
 
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un retrait d'argent d'un compte-bancaire
+     *
      * @param montant      montant retiré
      * @param numeroCompte numéro du compte
      * @return true si le retrait s'est effectué correctement, false sinon.
@@ -140,6 +140,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un transfert d'argent d'un compte à un autre de la même banque
+     *
      * @param montant             montant à transférer
      * @param numeroCompteInitial numéro du compte d'où sera prélevé l'argent
      * @param numeroCompteFinal   numéro du compte où sera déposé l'argent
@@ -149,12 +150,12 @@ public class Banque implements Serializable {
         CompteClient compteClient = getCompte(numeroCompteInitial);
         CompteClient compteClient2 = getCompte(numeroCompteFinal);
 
-        if (compteClient != null && compteClient2!=null) {
+        if (compteClient != null && compteClient2 != null) {
             CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
-            CompteBancaire compteBancaire2= compteClient2.getCompteBancaire(TypeCompte.CHEQUE);
+            CompteBancaire compteBancaire2 = compteClient2.getCompteBancaire(TypeCompte.CHEQUE);
 
-            if (compteBancaire != null && compteBancaire.debiter(montant) &&compteBancaire2.crediter(montant)) {
-                OperationTransfer operationTransfer= new OperationTransfer(montant,numeroCompteFinal);
+            if (compteBancaire != null && compteBancaire.debiter(montant) && compteBancaire2.crediter(montant)) {
+                OperationTransfer operationTransfer = new OperationTransfer(montant, numeroCompteFinal);
                 compteBancaire.ajouterOperation(operationTransfer);
                 return true;
             }
@@ -165,6 +166,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un paiement de facture
+     *
      * @param montant       montant de la facture
      * @param numeroCompte  numéro du compte bancaire d'où va se faire le paiement
      * @param numeroFacture numéro de la facture
@@ -201,6 +203,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un nouveau compte-client avec un numéro et un nip et l'ajoute à la liste des comptes.
+     *
      * @param numCompteClient numéro du compte-client à créer
      * @param nip             nip du compte-client à créer
      * @return true si le compte a été créé correctement, false sinon.
@@ -226,6 +229,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Nancy Nguyen et Mathis Odjo'o Ada
      * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
+     *
      * @param numCompteClient numéro du compte-client
      * @return numéro du compte-chèque du client ayant le numéro de compte-client
      */
@@ -244,6 +248,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Vérifie si le numéro de compte est valide
+     *
      * @param numDeCompte numéro de compte à vérifier
      * @return true si le numéro de compte est valide, false si non.
      */
@@ -259,6 +264,7 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un nouveua compte-client, et ajoute un compte bancaire associé à celui-ci
+     *
      * @param numCompteClient numéro du compte-client
      * @param nip             nip du compte client
      */
