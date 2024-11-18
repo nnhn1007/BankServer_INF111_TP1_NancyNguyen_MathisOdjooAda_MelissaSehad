@@ -29,9 +29,14 @@ public class CompteClient implements Serializable {
         return this.comptes.add(compte);
     }
 
+    /**
+     * Fait par Nancy Nguyen
+     * Accède au nip associé au compte-client
+     * @return le nip du compte-client
+     */
     public String getNip() {
         return this.nip;
-    } //Q3.1 - Ecq on peut l'ajouter??
+    }
 
 
     /**
