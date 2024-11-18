@@ -18,7 +18,7 @@ public abstract class CompteBancaire implements Serializable {
     /**
      * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
      * majuscule et 0 est un chiffre entre 0 et 9.
-     * @return
+     * @return un numéro de compte bancaire généré sous forme d'une chaîne de caractères
      */
     public static String genereNouveauNumero() {
         char[] t = new char[6];
@@ -43,33 +43,84 @@ public abstract class CompteBancaire implements Serializable {
         this.solde = 0;
         this.historique=new PileChainee();
     }
+
+    /**
+     * Accède au numéro du compte bancaire
+     * @return le numéro du compte bancaire
+     */
     public String getNumero() {
         return numero;
     }
+
+    /**
+     * Accède au type du compte bancaire
+     * @return le type du compte bancaire
+     */
     public TypeCompte getType() {
         return type;
     }
+
+    /**
+     * Accède au solde du compte bancaire
+     * @return le solde du compte bancaire
+     */
     public double getSolde() {
         return solde;
     }
 
-    // Méthode pour obtenir le type de compte
-    public TypeCompte getTypeDeCompte() {
-        return typeDeCompte;
-    }
+    /**
+     * Ajoute une opération à l'historique des opérations effectuées dans un compte bancaire
+     * @param operation l'opération à ajouter dans l'historique
+     */
     public void ajouterOperation(Operation operation){
         historique.empiler(operation);
     }
+
+    /**
+     * Affiche l'historique des opérations effectuées dans un compte bancaire
+     * @return l'historique des opérations sous forme de liste
+     */
     public ArrayList<Operation> afficherHistoriqueOperation(){
         return historique.getHistoriqueOperation();
     }
 
-
+    /**
+     * Met à jour le solde du compte bancaire
+     * @param solde solde à mettre à jour
+     * @return le solde, après avoir été  mis-à-jour
+     */
     public double setSolde(double solde) {
         return this.solde = solde;
     }
+
+    /**
+     * Méthode abstraite qui dépose un montant dans un compte bancaire
+     * @param montant montant à créditer
+     * @return true si le crédit est réussi, false sinon.
+     */
     public abstract boolean crediter(double montant);
+
+    /**
+     * Méthode abstraite qui débite un montant à un compte bancaire
+     * @param montant montant à débiter
+     * @return true si le débit est réussi, false sinon.
+     */
     public abstract boolean debiter(double montant);
+
+    /**
+     * Méthode abstraite permettant de payer une facture à partir d'un compte bancaire
+     * @param numeroFacture numéro de la facture à payer
+     * @param montant montant de la facture
+     * @param description description de la facture
+     * @return true si le paiement a été effectué avec succès, false sinon.
+     */
     public abstract boolean payerFacture(String numeroFacture, double montant, String description);
+
+    /**
+     * Méthode abstraite trasférant un montant vers un autre compte bancaire
+     * @param montant                  montant à tranférer
+     * @param numeroCompteDestinataire numéro du compte bancaire qui reçoit le transfert
+     * @return true si le transfert est réussi, false sinon
+     */
     public abstract boolean transferer(double montant, String numeroCompteDestinataire);
 }
