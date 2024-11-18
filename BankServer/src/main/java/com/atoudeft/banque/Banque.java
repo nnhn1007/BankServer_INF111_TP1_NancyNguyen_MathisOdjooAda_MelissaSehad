@@ -71,7 +71,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un dépot d'argent dans un compte-bancaire
-     *
      * @param montant      montant à déposer
      * @param numeroCompte numéro du compte
      * @return true si le dépot s'est effectué correctement, false sinon.
@@ -106,7 +105,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un retrait d'argent d'un compte-bancaire
-     *
      * @param montant      montant retiré
      * @param numeroCompte numéro du compte
      * @return true si le retrait s'est effectué correctement, false sinon.
@@ -141,7 +139,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un transfert d'argent d'un compte à un autre de la même banque
-     *
      * @param montant             montant à transférer
      * @param numeroCompteInitial numéro du compte d'où sera prélevé l'argent
      * @param numeroCompteFinal   numéro du compte où sera déposé l'argent
@@ -167,7 +164,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un paiement de facture
-     *
      * @param montant       montant de la facture
      * @param numeroCompte  numéro du compte bancaire d'où va se faire le paiement
      * @param numeroFacture numéro de la facture
