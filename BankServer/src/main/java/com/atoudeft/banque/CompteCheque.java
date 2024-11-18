@@ -62,7 +62,7 @@ public class CompteCheque extends CompteBancaire {
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        if (getSolde() > montant && numeroFacture != null && description != null) {
+        if (getSolde() >= montant && montant>ZERO) {
             debiter(montant);
             return true;
         }
@@ -79,7 +79,7 @@ public class CompteCheque extends CompteBancaire {
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
-        if (getSolde() > montant && montant > ZERO) {
+        if (getSolde() >= montant && montant > ZERO) {
             setSolde(getSolde() - montant);
             return true;
         }

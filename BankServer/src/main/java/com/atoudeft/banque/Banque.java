@@ -117,7 +117,7 @@ public class Banque implements Serializable {
             CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
             CompteBancaire compteBancaire2 = compteClient2.getCompteBancaire(TypeCompte.CHEQUE);
 
-            if (compteBancaire != null && compteBancaire.debiter(montant) && compteBancaire2.crediter(montant)) {
+            if (compteBancaire != null && compteBancaire.transferer(montant,numeroCompteFinal) && compteBancaire2.crediter(montant)) {
                 OperationTransfer operationTransfer = new OperationTransfer(montant, numeroCompteFinal);
                 compteBancaire.ajouterOperation(operationTransfer);
                 return true;
@@ -137,7 +137,7 @@ public class Banque implements Serializable {
      */
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
         CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
-        if (compteBancaire != null && compteBancaire.debiter(montant)) {
+        if (compteBancaire != null && compteBancaire.payerFacture(numeroFacture,montant,description)) {
             System.out.println(compteBancaire.getSolde());
             OperationFacture operationFacture = new OperationFacture(montant, numeroFacture, description);
             compteBancaire.ajouterOperation(operationFacture);

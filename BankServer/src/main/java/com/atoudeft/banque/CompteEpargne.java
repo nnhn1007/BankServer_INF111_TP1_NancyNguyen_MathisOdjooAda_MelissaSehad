@@ -52,13 +52,9 @@ public class CompteEpargne extends CompteBancaire {
      */
     @Override
     public boolean debiter(double montant) {
-        double soldeInitial = getSolde();
-        if (montant > ZERO && getSolde() > (montant + FRAIS)) {
+        if (montant > ZERO && getSolde() >= (montant + FRAIS)) {
+            tauxRetrait();
             setSolde(getSolde() - montant); //Débite le montant du solde
-            if (soldeInitial < LIMITE) {
-                setSolde(getSolde() - FRAIS); //Débite les frais si getSolde()<1000
-            }
-
             return true;
         }
         return false;
@@ -75,7 +71,8 @@ public class CompteEpargne extends CompteBancaire {
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
-        if (getSolde() > (montant + FRAIS) && montant > ZERO) {
+        if (getSolde() >= (montant + FRAIS) && montant > ZERO) {
+            tauxRetrait();
             setSolde(getSolde() - montant);
             return true;
         }
@@ -86,13 +83,14 @@ public class CompteEpargne extends CompteBancaire {
      * Fait par Nancy Nguyen
      * Fait le transfert d'un montant vers un autre comopte, si le solde est suffisant
      * @param montant                  montant à transférer
-     * @param numeroCompteDestinataire le numéro de compte destinataire
+     * @param numeroCompteInitial le numéro de compte destinataire
      * @return true, si le transfert a été effectué avec succès, false sinon
      */
     @Override
-    public boolean transferer(double montant, String numeroCompteDestinataire) {
-        if (getSolde() > (montant + FRAIS) && montant > ZERO) {
-            setSolde(getSolde() - montant);
+    public boolean transferer(double montant, String numeroCompteInitial) {
+        if (montant > ZERO && getSolde() >= (montant + FRAIS)) {
+            tauxRetrait();
+            setSolde(getSolde() - montant); //Débite le montant du solde
             return true;
         }
         return false;
@@ -104,5 +102,16 @@ public class CompteEpargne extends CompteBancaire {
      */
     public void ajouterInterets() {
         setSolde(getSolde() + (getSolde() * TAUX_INTERET));
+    }
+
+    /**
+     * Fait par Mathis Odjo'o Ada
+     * Applique des frais de retrait de 2$ si le solde initial du compte est inférieur à la limite définie.
+     */
+    public void tauxRetrait() {
+        double soldeInitial = getSolde();
+        if (soldeInitial < LIMITE) {
+            setSolde(getSolde() - FRAIS); //Débite les frais si getSolde()<1000
+        }
     }
 }
