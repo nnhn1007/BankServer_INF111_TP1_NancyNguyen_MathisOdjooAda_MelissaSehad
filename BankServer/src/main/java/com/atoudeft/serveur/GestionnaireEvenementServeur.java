@@ -181,7 +181,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteActuel();
-                    System.out.println("CPT"+numCompteClient);
                     double montant = Double.parseDouble(t[0]);
 
                     //2. Vérifier si le client est connecté au serveur
@@ -289,7 +288,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     //Accéder au compte-client et à son historique
                     banque = serveurBanque.getBanque();
                     compteClient = banque.getCompteClient(numCompteClient);
-                    String compteActuel= cnx.getNumeroCompteActuel();
+                    String compteActuel= cnx.getNumeroCompteActuel(); /* Cette ligne retourne null et nous empêche d'afficher
+                                                                      l'historique des opération */
                     //Récupérer l'historique des opérations reliés au compte bancaire
                     compteBancaire = compteClient.getCompteBancaire(compteActuel);
                     if(compteBancaire!=null) {
