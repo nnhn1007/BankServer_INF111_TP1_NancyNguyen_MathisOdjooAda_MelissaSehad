@@ -16,7 +16,6 @@ public class Banque implements Serializable {
 
     /**
      * Constructeur Banque, avec le paramètre nom
-     *
      * @param nom nom de la banque
      */
     public Banque(String nom) {
@@ -27,7 +26,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Recherche un compte-client à partir de son numéro.
-     *
      * @param numeroCompteClient le numéro du compte-client
      * @return le compte-client s'il a été trouvé,
      * Sinon, retourne null.
@@ -43,7 +41,6 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     *
      * @param numDeCompteClient numéro du compte-client
      * @return le compte-client s'il existe, null sinon.
      */
@@ -62,7 +59,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Vérifier qu'un compte-bancaire appartient bien au compte-client spécifié.
-     *
      * @param numeroCompteBancaire numéro du compte-bancaire
      * @param numeroCompteClient   numéro du compte-client
      * @return true, si le compte-bancaire appartient au compte-client, false sinon.
@@ -91,6 +87,11 @@ public class Banque implements Serializable {
         return false;
     }
 
+    /**
+     * Recherche un compte bancaire spécifique dans une liste de comptes-clients
+     * @param numeroCompte numéro du compte bancaire à rechercher
+     * @return le compte bancaire que l'on recherche, sinon null
+     */
     public CompteBancaire getCompteBancaire(String numeroCompte) {
         CompteBancaire compteBancaire;
         for (CompteClient compteClient : comptes) {
@@ -203,7 +204,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un nouveau compte-client avec un numéro et un nip et l'ajoute à la liste des comptes.
-     *
      * @param numCompteClient numéro du compte-client à créer
      * @param nip             nip du compte-client à créer
      * @return true si le compte a été créé correctement, false sinon.
@@ -229,7 +229,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Nancy Nguyen et Mathis Odjo'o Ada
      * Retourne le numéro du compte-chèque d'un client à partir de son numéro de compte-client.
-     *
      * @param numCompteClient numéro du compte-client
      * @return numéro du compte-chèque du client ayant le numéro de compte-client
      */
@@ -248,7 +247,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Vérifie si le numéro de compte est valide
-     *
      * @param numDeCompte numéro de compte à vérifier
      * @return true si le numéro de compte est valide, false si non.
      */
@@ -264,7 +262,6 @@ public class Banque implements Serializable {
     /**
      * Fait par Mathis Odjo'o Ada
      * Crée un nouveua compte-client, et ajoute un compte bancaire associé à celui-ci
-     *
      * @param numCompteClient numéro du compte-client
      * @param nip             nip du compte client
      */
