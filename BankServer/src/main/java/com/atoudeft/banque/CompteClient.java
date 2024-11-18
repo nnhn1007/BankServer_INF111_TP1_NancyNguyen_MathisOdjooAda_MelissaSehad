@@ -10,7 +10,7 @@ public class CompteClient implements Serializable {
     private List<CompteBancaire> comptes;
 
     /**
-     * Crée un compte-client avec un numéro et un NIP.
+     * Crée un compte-client avec un numéro et un NIP
      * @param numero le numéro unique du compte-client
      * @param nip    le NIP associé au compte-client
      */
