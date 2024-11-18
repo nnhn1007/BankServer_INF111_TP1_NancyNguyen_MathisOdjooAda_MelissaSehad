@@ -28,14 +28,9 @@ public class CompteClient implements Serializable {
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
-    /**
-     *Fait par Nancy Nguyen
-     * Accède au nip associé au compte-client
-     * @return le nip du compte-client
-     */
 
     /**
-     * Fait par Nancy Nguyen
+     *Fait par Nancy Nguyen
      * Accède au nip associé au compte-client
      * @return le nip du compte-client
      */
@@ -48,10 +43,9 @@ public class CompteClient implements Serializable {
      * Fait Mathis Odjo'o Ada
      * Vérifie si le numéro de compte fourni est déjà présent dans les comptes
      * bancaires enregistrés.
-     *
      * @param numDeCompte le numéro de compte à vérifier
      * @return true si le numéro de compte n'est pas trouvé parmi les comptes,
-     *         false sinon
+     *         false sinon.
      */
     public boolean getCompteDestinataire(String numDeCompte) {
         for (int i=0; i<comptes.size(); i++) {
@@ -65,7 +59,6 @@ public class CompteClient implements Serializable {
     /**
      * Fait Mathis Odjo'o Ada
      * Retourne un compte bancaire correspondant au type de compte spécifié.
-     *
      * @param typeCompte Le type de compte recherché par le client
      * @return Le compte bancaire correspondant au type spécifié, sinon retourne
      * null si aucun compte n'est trouvé
@@ -81,15 +74,12 @@ public class CompteClient implements Serializable {
 
     /**
      * Retourne un compte bancaire correspondant au numéro de compte spécifié.
-     *
      * @param numDeCompte le numéro de compte recherché par le client
      * @return le compte bancaire correspondant au numéro de compte, sinon
      * retourne null s'il n'est pas trouvé
      */
     public CompteBancaire getCompteBancaire(String numDeCompte) {
-        System.out.println("Recherche du compte : " + numDeCompte); //TODO TEST À SUPPRIMER.
         for (CompteBancaire compteBancaire : comptes) {
-            System.out.println("Compte présent : " + compteBancaire.getNumero()); //TODO TEST À SUPPRIMER.
             if (compteBancaire.getNumero().equals(numDeCompte)) {
                 return compteBancaire;
             }
