@@ -217,7 +217,13 @@ public class Banque implements Serializable {
         compteClient.ajouter(compteCheque);
         comptes.add(compteClient);
     }
-
+    /**
+     * Fait par Mathis Odjo'o Ada
+     * Retourne un compte bancaire correspondant au numéro de compte spécifié.
+     * @param numeroCompte le numéro de compte recherché par le client
+     * @return le compte bancaire correspondant au numéro de compte, sinon
+     * retourne null s'il n'est pas trouvé
+     */
     private CompteBancaire getCompteBancaire(String numeroCompte) {
         CompteBancaire compteBancaire;
         for (CompteClient compteClient : comptes) {

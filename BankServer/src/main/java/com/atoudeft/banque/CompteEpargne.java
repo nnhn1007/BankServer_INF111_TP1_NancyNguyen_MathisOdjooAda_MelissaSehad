@@ -98,7 +98,7 @@ public class CompteEpargne extends CompteBancaire {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Ajoute les intérêts au solde en utilisant le taux d'intérêt.
+     * Ajout des intérêts au solde en utilisant le taux d'intérêt définit dans le constructeur.
      */
     public void ajouterInterets() {
         setSolde(getSolde() + (getSolde() * TAUX_INTERET));
