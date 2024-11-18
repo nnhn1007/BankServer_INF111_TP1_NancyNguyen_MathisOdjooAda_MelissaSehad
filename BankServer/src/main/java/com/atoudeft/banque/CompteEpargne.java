@@ -30,12 +30,13 @@ public class CompteEpargne extends CompteBancaire {
      * Crédite un montant au solde, s'il est strictement positif
      * @param montant Montant à créditer au solde
      * @return true, si le montant est positif
-     *         false, si le montant est négatif ou nul
+     * false, si le montant est négatif ou nul
      */
     @Override
     public boolean crediter(double montant) {
         if (montant > ZERO) { //Strictement positif
             setSolde(getSolde() + montant);
+            ajouterInterets();
             return true;
         }
         return false;
@@ -46,8 +47,8 @@ public class CompteEpargne extends CompteBancaire {
      * Débite le montant du solde s'il est positif, et s'il y a assez de fonds au solde
      * @param montant Montant à retirer
      * @return True, si le solde initial était strictement positif et qu'il
-     *              est plus grand ou égal au montant à retirer,
-     *              false sinon.
+     * est plus grand ou égal au montant à retirer,
+     * false sinon.
      */
     @Override
     public boolean debiter(double montant) {
@@ -95,5 +96,13 @@ public class CompteEpargne extends CompteBancaire {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Fait par Mathis Odjo'o Ada
+     * Ajoute les intérêts au solde en utilisant le taux d'intérêt.
+     */
+    public void ajouterInterets() {
+        setSolde(getSolde() + (getSolde() * TAUX_INTERET));
     }
 }
