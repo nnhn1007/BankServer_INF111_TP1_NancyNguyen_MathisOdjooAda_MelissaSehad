@@ -16,8 +16,8 @@ public class CompteEpargne extends CompteBancaire {
     /**
      * Fait par Nancy Nguyen
      * Constructeur avec parametres
-     * @param numero numéro du compte
-     * @param type   type du compte
+     * @param numero       numéro du compte
+     * @param type         type du compte
      * @param TAUX_INTERET taux d'interet du compte
      */
     public CompteEpargne(String numero, TypeCompte type, double TAUX_INTERET) {
@@ -46,8 +46,8 @@ public class CompteEpargne extends CompteBancaire {
      * Débite le montant du solde s'il est positif, et s'il y a assez de fonds au solde
      * @param montant Montant à retirer
      * @return True, si le solde initial était strictement positif et qu'il
-     *              est plus grand ou égal au montant à retirer
-     *              false, sinon
+     *              est plus grand ou égal au montant à retirer,
+     *              false sinon.
      */
     @Override
     public boolean debiter(double montant) {
@@ -70,8 +70,7 @@ public class CompteEpargne extends CompteBancaire {
      * @param numeroFacture le numéro de la facture à payer
      * @param montant       le montant de la facture à payer
      * @param description   une description de la facture
-     * @return true si la facture a été payée avec succès,
-     *         false, sinon
+     * @return true si la facture a été payée avec succès, false sinon.
      */
     @Override
     public boolean payerFacture(String numeroFacture, double montant, String description) {
@@ -87,8 +86,7 @@ public class CompteEpargne extends CompteBancaire {
      * Fait le transfert d'un montant vers un autre comopte, si le solde est suffisant
      * @param montant                  montant à transférer
      * @param numeroCompteDestinataire le numéro de compte destinataire
-     * @return true, si le transfert a été effectué avec succès
-     *         false, sinon
+     * @return true, si le transfert a été effectué avec succès, false sinon
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
