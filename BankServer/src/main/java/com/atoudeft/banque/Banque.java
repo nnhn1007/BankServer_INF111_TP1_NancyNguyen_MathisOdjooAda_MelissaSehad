@@ -164,7 +164,7 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Effectue un paiement de facture.
+     * Effectue un paiement de facture
      * @param montant       montant de la facture
      * @param numeroCompte  numéro du compte bancaire d'où va se faire le paiement
      * @param numeroFacture numéro de la facture
