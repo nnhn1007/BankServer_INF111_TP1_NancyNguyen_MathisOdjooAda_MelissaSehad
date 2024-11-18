@@ -18,7 +18,7 @@ public abstract class CompteBancaire implements Serializable {
     /**
      * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
      * majuscule et 0 est un chiffre entre 0 et 9.
-     * @return un numéro de compte bancaire généré sous forme d'une chaîne de caractères
+     * @return  un numéro de compte bancaire généré sous forme d'une chaîne de caractères
      */
     public static String genereNouveauNumero() {
         char[] t = new char[6];
@@ -69,6 +69,7 @@ public abstract class CompteBancaire implements Serializable {
     }
 
     /**
+     * Fait par Nancy Nguyen et Mathis Odjo'o Ada
      * Ajoute une opération à l'historique des opérations effectuées dans un compte bancaire
      * @param operation l'opération à ajouter dans l'historique
      */
@@ -76,7 +77,7 @@ public abstract class CompteBancaire implements Serializable {
         historique.empiler(operation);
     }
 
-    /**
+    /** Fait par Mathis Odjo'o Ada
      * Affiche l'historique des opérations effectuées dans un compte bancaire
      * @return l'historique des opérations sous forme de liste
      */
@@ -85,7 +86,8 @@ public abstract class CompteBancaire implements Serializable {
     }
 
     /**
-     * Met à jour le solde du compte bancaire
+     * Fait par Nancy Nguyen et Mathis Odjo'o Ada
+     *  Met à jour le solde du compte bancaire
      * @param solde solde à mettre à jour
      * @return le solde, après avoir été  mis-à-jour
      */
