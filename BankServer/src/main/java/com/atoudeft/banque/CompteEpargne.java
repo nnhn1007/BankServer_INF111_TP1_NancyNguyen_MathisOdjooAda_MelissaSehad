@@ -97,7 +97,7 @@ public class CompteEpargne extends CompteBancaire {
     }
 
     /**
-     * Fait par Mathis Odjo'o Ada
+     * Fait par Mathis Odjo'o Ada et Melissa Sehad
      * Ajout des intérêts au solde en utilisant le taux d'intérêt définit dans le constructeur.
      */
     public void ajouterInterets() {
@@ -105,7 +105,7 @@ public class CompteEpargne extends CompteBancaire {
     }
 
     /**
-     * Fait par Mathis Odjo'o Ada
+     * Fait par Mathis Odjo'o Ada et Melissa Sehad
      * Applique des frais de retrait de 2$ si le solde initial du compte est inférieur à la limite définie.
      */
     public void tauxRetrait() {
