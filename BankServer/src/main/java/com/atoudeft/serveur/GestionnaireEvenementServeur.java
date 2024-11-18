@@ -179,7 +179,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer("DEPOT NO");
                         break;
                     }
-
                     banque = serveurBanque.getBanque();
                     numCompteClient = cnx.getNumeroCompteActuel();
                     System.out.println("CPT"+numCompteClient);
@@ -208,7 +207,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     //Déclaration des variables
                     banque = serveurBanque.getBanque();
-                    numCompteClient = cnx.getNumeroCompteClient();
+                    numCompteClient = cnx.getNumeroCompteActuel();
                     montant = Double.parseDouble(t[0]);
 
                     //Vérifier si le client est connecté
@@ -227,7 +226,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 case "FACTURE": //Fait par Nancy Nguyen et Mathis Odjo'o Ada
                     argument = evenement.getArgument(); // Récupération des informations du client
                     t = argument.split(" ");
-                    if (t.length < 3) { //Vérifie qu'il y a bien:  montant NUMFACT Description
+                    if (t.length < 2) { //Vérifie qu'il y a bien:  montant NUMFACT Description
                         cnx.envoyer("FACTURE NO");
                         break;
                     }
@@ -237,7 +236,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     String numFact = t[1];
                     String description = t[2];
                     banque = serveurBanque.getBanque();
-                    numCompteClient = cnx.getNumeroCompteClient();
+                    numCompteClient = cnx.getNumeroCompteActuel();
 
                     //Vérifier si le client est connecté
                     if (numCompteClient == null || numFact == null || description == null) {

@@ -45,10 +45,7 @@ public class Banque implements Serializable {
      * @return le compte-client s'il existe, null sinon.
      */
     public CompteClient getCompte(String numDeCompteClient) {
-        System.out.println("Recherche du compte : " + numDeCompteClient); //TODO TEST À SUPPRIMER.
         for (CompteClient compteClient : comptes) {
-            System.out.println("Compte présent : " + compteClient.getNumero()); //TODO TEST À SUPPRIMER.
-
             if (compteClient.getNumero().equals(numDeCompteClient)) {
                 return compteClient;
             }
@@ -87,22 +84,6 @@ public class Banque implements Serializable {
     }
 
     /**
-     * Recherche un compte bancaire spécifique dans une liste de comptes-clients
-     * @param numeroCompte numéro du compte bancaire à rechercher
-     * @return le compte bancaire que l'on recherche, sinon null
-     */
-    public CompteBancaire getCompteBancaire(String numeroCompte) {
-        CompteBancaire compteBancaire;
-        for (CompteClient compteClient : comptes) {
-            if (compteClient.getCompteBancaire(numeroCompte) != null) {
-                compteBancaire = compteClient.getCompteBancaire(numeroCompte);
-                return compteBancaire;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Fait par Mathis Odjo'o Ada
      * Effectue un retrait d'argent d'un compte-bancaire
      * @param montant      montant retiré
@@ -110,28 +91,12 @@ public class Banque implements Serializable {
      * @return true si le retrait s'est effectué correctement, false sinon.
      */
     public boolean retirer(double montant, String numeroCompte) {
-        CompteClient compteClient = getCompte(numeroCompte);
-        /* Le code ci-dessous est celui que nous souhaitions implémenter. Par contre, en raison
-        d'une ligne spécifique, il ne fonctionne pas comme prévu.
-
-     if (compteClient != null) {
-            CompteBancaire compteBancaire= getCompteBancaire(numeroCompte);
-            if (compteBancaire != null && compteBancaire.debiter(montant)) {
-                OperationRetrait operationRetrait = new OperationRetrait(montant);
-                compteBancaire.ajouterOperation(operationRetrait);
-                return true;
-            }
-        }
-        return false;
-    }
-         */
-        if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(TypeCompte.CHEQUE);
-            if (compteBancaire != null && compteBancaire.debiter(montant)) {
-                OperationRetrait operationRetrait = new OperationRetrait(montant);
-                compteBancaire.ajouterOperation(operationRetrait);
-                return true;
-            }
+        CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
+        if (compteBancaire != null && compteBancaire.debiter(montant)) {
+            System.out.println(compteBancaire.getSolde());
+            OperationRetrait operationRetrait = new OperationRetrait(montant);
+            compteBancaire.ajouterOperation(operationRetrait);
+            return true;
         }
         return false;
     }
@@ -171,28 +136,12 @@ public class Banque implements Serializable {
      * @return true si le paiement s'est bien effectuée, false sinon.
      */
     public boolean payerFacture(double montant, String numeroCompte, String numeroFacture, String description) {
-        CompteClient compteClient = getCompte(numeroCompte);
-        /* Le code ci-dessous est celui que nous souhaitions implémenter. Par contre, en raison
-        d'une ligne spécifique, il ne fonctionne pas comme prévu.
-
-        if (compteClient != null) {
-            CompteBancaire compteBancaire= getCompteBancaire(numeroCompte);
-            if (compteBancaire != null && compteBancaire.debiter(montant)) {
-                OperationRetrait operationRetrait = new OperationRetrait(montant);
-                compteBancaire.ajouterOperation(operationRetrait);
-                return true;
-            }
-        }
-        return false;
-    }
-         */
-        if (compteClient != null) {
-            CompteBancaire compteBancaire = compteClient.getCompteBancaire(numeroCompte);//TODO À changer
-            if (compteBancaire != null && compteBancaire.payerFacture(numeroFacture, montant, description)) {
-                OperationFacture operationFacture = new OperationFacture(montant, numeroFacture, description);
-                compteBancaire.ajouterOperation(operationFacture);
-                return true;
-            }
+        CompteBancaire compteBancaire = getCompteBancaire(numeroCompte);
+        if (compteBancaire != null && compteBancaire.debiter(montant)) {
+            System.out.println(compteBancaire.getSolde());
+            OperationFacture operationFacture = new OperationFacture(montant, numeroFacture, description);
+            compteBancaire.ajouterOperation(operationFacture);
+            return true;
         }
         return false;
     }
@@ -257,7 +206,7 @@ public class Banque implements Serializable {
 
     /**
      * Fait par Mathis Odjo'o Ada
-     * Crée un nouveau compte-client, et ajoute un compte bancaire associé à celui-ci
+     * Crée un nouveua compte-client, et ajoute un compte bancaire associé à celui-ci
      * @param numCompteClient numéro du compte-client
      * @param nip             nip du compte client
      */
@@ -267,5 +216,16 @@ public class Banque implements Serializable {
         CompteCheque compteCheque = new CompteCheque(numCompteBancaire, TypeCompte.CHEQUE);
         compteClient.ajouter(compteCheque);
         comptes.add(compteClient);
+    }
+
+    private CompteBancaire getCompteBancaire(String numeroCompte) {
+        CompteBancaire compteBancaire;
+        for (CompteClient compteClient : comptes) {
+            if (compteClient.getCompteBancaire(numeroCompte) != null) {
+                compteBancaire = compteClient.getCompteBancaire(numeroCompte);
+                return compteBancaire;
+            }
+        }
+        return null;
     }
 }
