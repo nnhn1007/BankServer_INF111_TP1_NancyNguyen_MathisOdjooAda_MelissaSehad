@@ -10,9 +10,9 @@ public class CompteClient implements Serializable {
     private List<CompteBancaire> comptes;
 
     /**
-     * Crée un compte-client avec un numéro et un nip.
-     * @param numero le numéro du compte-client
-     * @param nip    le nip
+     * Crée un compte-client avec un numéro et un NIP.
+     * @param numero le numéro unique du compte-client
+     * @param nip    le NIP associé au compte-client
      */
     public CompteClient(String numero, String nip) {
         this.numero = numero;
@@ -21,13 +21,18 @@ public class CompteClient implements Serializable {
     }
 
     /**
-     * Ajoute un compte bancaire au compte-client.
-     * @param compte le compte bancaire
-     * @return true si l'ajout est réussi
+     * Ajoute un compte bancaire à la liste des comptes du client.
+     * @param compte le compte bancaire à ajouter
+     * @return true si l'ajout est réussi, false sinon
      */
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
+    /**
+     *Fait par Nancy Nguyen
+     * Accède au nip associé au compte-client
+     * @return le nip du compte-client
+     */
 
     /**
      * Fait par Nancy Nguyen
@@ -40,13 +45,16 @@ public class CompteClient implements Serializable {
 
 
     /**
-     * //TODO Ne pas oublier le constructeur.
+     * Fait Mathis Odjo'o Ada
+     * Vérifie si le numéro de compte fourni est déjà présent dans les comptes
+     * bancaires enregistrés.
      *
-     * @param numDeCompte
-     * @return
+     * @param numDeCompte le numéro de compte à vérifier
+     * @return true si le numéro de compte n'est pas trouvé parmi les comptes,
+     *         false sinon
      */
     public boolean getCompteDestinataire(String numDeCompte) {
-        for (int i=0; i<comptes.size(); i++) {  //TODO À changer.
+        for (int i=0; i<comptes.size(); i++) {
             if ((numDeCompte.equals(getNumero()))){
                 return false;
             }
@@ -55,8 +63,12 @@ public class CompteClient implements Serializable {
     }
 
     /**
-     * @param typeCompte
-     * @return
+     * Fait Mathis Odjo'o Ada
+     * Retourne un compte bancaire correspondant au type de compte spécifié.
+     *
+     * @param typeCompte Le type de compte recherché par le client
+     * @return Le compte bancaire correspondant au type spécifié, sinon retourne
+     * null si aucun compte n'est trouvé
      */
     public CompteBancaire getCompteBancaire(TypeCompte typeCompte) {
         for (CompteBancaire compteBancaire : comptes) {
@@ -68,8 +80,11 @@ public class CompteClient implements Serializable {
     }
 
     /**
-     * @param numDeCompte
-     * @return
+     * Retourne un compte bancaire correspondant au numéro de compte spécifié.
+     *
+     * @param numDeCompte le numéro de compte recherché par le client
+     * @return le compte bancaire correspondant au numéro de compte, sinon
+     * retourne null s'il n'est pas trouvé
      */
     public CompteBancaire getCompteBancaire(String numDeCompte) {
         System.out.println("Recherche du compte : " + numDeCompte); //TODO TEST À SUPPRIMER.
@@ -84,8 +99,8 @@ public class CompteClient implements Serializable {
 
     /**
      * Fait par Melissa Sehad
-     * Methode qui returne le numero du compte-client
-     * @return le numero du compte-client
+     * Methode qui retourne le numero du compte-client
+     * @return le numéro du compte-client
      */
     public String getNumero() {
         return numero;

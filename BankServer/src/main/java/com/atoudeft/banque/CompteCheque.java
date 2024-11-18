@@ -50,7 +50,7 @@ public class CompteCheque extends CompteBancaire {
     }
 
     /**
-     * Fait par Mathis
+     * Fait par Mathis Odjo'o Ada
      * Facture un montant en utilisant le solde disponible en vérifiant
      * d'abord si numeroFacture est nulle, si le solde est suffisant si
      * et la description est non nulle.
@@ -70,9 +70,12 @@ public class CompteCheque extends CompteBancaire {
     }
 
     /**
-     * @param montant
-     * @param numeroCompteDestinataire
-     * @return
+     * Fait par Mathis Odjo'o Ada
+     * Fait le transfert d'un montant vers un autre comopte, si le solde est suffisant
+     * @param montant montant à transférer
+     * @param numeroCompteDestinataire le numéro de compte destinataire
+     * @return true, si le transfert a été effectué avec succès
+     *         sinon, retourne false.
      */
     @Override
     public boolean transferer(double montant, String numeroCompteDestinataire) {
